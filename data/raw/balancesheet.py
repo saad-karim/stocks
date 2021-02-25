@@ -11,7 +11,7 @@ def genRespWithYear(balanceSheet, year):
 
 class Yearly:
 
-    sheets = {}
+    __sheets = {}
 
     def __init__(self):
         return
@@ -19,7 +19,7 @@ class Yearly:
     def load(self, sheets):
         for sheet in sheets:
             resp = self.data(sheet)
-            self.sheets[resp["Year"]] = resp
+            self.__sheets[resp["Year"]] = resp
 
     def data(self, sheet):
         recordDate = sheet["date"]
@@ -27,11 +27,14 @@ class Yearly:
         return genRespWithYear(sheet, year)
 
     def year(self, year):
-        return self.sheets[year]
+        return self.__sheets[year]
+
+    def allYears(self):
+        return self.__sheets
 
 class Quarterly:
 
-    sheets = {}
+    __sheets = {}
 
     def __init__(self):
         return
@@ -40,7 +43,7 @@ class Quarterly:
         for sheet in sheets:
             resp = self.data(sheet)
             if resp != None:
-                self.sheets[resp["Year"]] = {
+                self.__sheets[resp["Year"]] = {
                     resp["Quarter"]: resp,
                 }
 
@@ -53,10 +56,13 @@ class Quarterly:
         return qtr
 
     def quarter(self, year, qtr):
-        if qtr in self.sheets[year]:
-            return self.sheets[year][qtr]
+        if qtr in self.__sheets[year]:
+            return self.__sheets[year][qtr]
 
         return {}
+
+    def allQtrs(self):
+        return self.__sheets
 
 class BalanceSheet:
 
@@ -79,3 +85,39 @@ class BalanceSheet:
 
     def year(self, year):
         return self.yearly.year(year)
+
+    def output(self):
+        return {
+            'Cash': [[
+                self.quarter(2020, "Q2").get("Cash"),
+                self.quarter(2020, "Q1").get("Cash"),
+                self.year(2019).get("Cash"),
+                self.year(2018).get("Cash"),
+                self.year(2017).get("Cash"),
+                self.year(2016).get("Cash"),
+            ], "money"],
+            'Current Assets': [[
+                self.quarter(2020, "Q2").get("Current Assets"),
+                self.quarter(2020, "Q1").get("Current Assets"),
+                self.year(2019).get("Current Assets"),
+                self.year(2018).get("Current Assets"),
+                self.year(2017).get("Current Assets"),
+                self.year(2016).get("Current Assets"),
+            ], "money"],
+            'Current Liabilities': [[
+                self.quarter(2020, "Q2").get("Current Liabilities"),
+                self.quarter(2020, "Q1").get("Current Liabilities"),
+                self.year(2019).get("Current Liabilities"),
+                self.year(2018).get("Current Liabilities"),
+                self.year(2017).get("Current Liabilities"),
+                self.year(2016).get("Current Liabilities"),
+            ], "money"],
+            'Shareholder Equity': [[
+                self.quarter(2020, "Q2").get("Shareholder Equity"),
+                self.quarter(2020, "Q1").get("Shareholder Equity"),
+                self.year(2019).get("Shareholder Equity"),
+                self.year(2018).get("Shareholder Equity"),
+                self.year(2017).get("Shareholder Equity"),
+                self.year(2016).get("Shareholder Equity"),
+            ], "money"],
+        }

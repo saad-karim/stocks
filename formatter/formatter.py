@@ -1,9 +1,4 @@
 import csv
-from formatter.income import income
-from formatter.balancesheet import balanceSheet
-from formatter.cashflow import cashflow
-from formatter.ratios import ratios
-from formatter.growth import growth
 
 class Formatter:
 

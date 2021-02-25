@@ -92,11 +92,11 @@ class Writer:
 
         row += 2
         worksheet.write("A{0}".format(row), 'Income', self.h3)
-        row = self.writeData(worksheet, row, formatter.incomeData(stock))
+        row = self.writeData(worksheet, row, stock.income.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Balance Sheet', self.h3)
-        row = self.writeData(worksheet, row, formatter.balanceSheetData(stock))
+        row = self.writeData(worksheet, row, stock.balanceSheet.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Cash Flow', self.h3)
@@ -104,11 +104,11 @@ class Writer:
 
         row += 2
         worksheet.write("A{0}".format(row), 'Ratios', self.h3)
-        row = self.writeData(worksheet, row, formatter.ratioData(stock))
+        row = self.writeData(worksheet, row, stock.ratios.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Growth', self.h3)
-        row = self.writeData(worksheet, row, formatter.growthData(stock))
+        row = self.writeData(worksheet, row, stock.financialGrowth.output())
 
         self.workbook.close()
 

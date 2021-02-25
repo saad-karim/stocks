@@ -107,3 +107,87 @@ class Income:
 
     def ttmEPS(self):
         return self.quarterly.ttmEPS()
+
+    def output(self):
+        return {
+            'Interest Expense': [[
+                self.quarter(2020, "Q2").get("Interest Expense"),
+                self.quarter(2020, "Q1").get("Interest Expense"),
+                self.year(2019).get("Interest Expense"),
+                self.year(2018).get("Interest Expense"),
+                self.year(2017).get("Interest Expense"),
+                self.year(2016).get("Interest Expense"),
+            ], "ratio"],
+            'Total Revenue': [[
+                self.quarter(2020, "Q2").get("Total Revenue"),
+                self.quarter(2020, "Q1").get("Total Revenue"),
+                self.year(2019).get("Total Revenue"),
+                self.year(2018).get("Total Revenue"),
+                self.year(2017).get("Total Revenue"),
+                self.year(2016).get("Total Revenue"),
+            ], "money"],
+            'EBITDA': [[
+                self.quarter(2020, "Q2").get("EBITDA"),
+                self.quarter(2020, "Q1").get("EBITDA"),
+                self.year(2019).get("EBITDA"),
+                self.year(2018).get("EBITDA"),
+                self.year(2017).get("EBITDA"),
+                self.year(2016).get("EBITDA"),
+            ], "money"],
+            'Net Income': [[
+                self.quarter(2020, "Q2").get("Net Income"),
+                self.quarter(2020, "Q1").get("Net Income"),
+                self.year(2019).get("Net Income"),
+                self.year(2018).get("Net Income"),
+                self.year(2017).get("Net Income"),
+                self.year(2016).get("Net Income"),
+            ], "money"],
+            'Net Income Ratio': [[
+                self.quarter(2020, "Q2").get("Net Income Ratio"),
+                self.quarter(2020, "Q1").get("Net Income Ratio"),
+                self.year(2019).get("Net Income Ratio"),
+                self.year(2018).get("Net Income Ratio"),
+                self.year(2017).get("Net Income Ratio"),
+                self.year(2016).get("Net Income Ratio"),
+            ], "ratio"],
+            'Gross Profit': [[
+                self.quarter(2020, "Q2").get("Gross Profit"),
+                self.quarter(2020, "Q1").get("Gross Profit"),
+                self.year(2019).get("Gross Profit"),
+                self.year(2018).get("Gross Profit"),
+                self.year(2017).get("Gross Profit"),
+                self.year(2016).get("Gross Profit"),
+            ], "money"],
+            'Gross Profit Ratio': [[
+                self.quarter(2020, "Q2").get("Gross Profit Ratio"),
+                self.quarter(2020, "Q1").get("Gross Profit Ratio"),
+                self.year(2019).get("Gross Profit Ratio"),
+                self.year(2018).get("Gross Profit Ratio"),
+                self.year(2017).get("Gross Profit Ratio"),
+                self.year(2016).get("Gross Profit Ratio"),
+            ], "ratio"],
+            'Operating Income': [[
+                self.quarter(2020, "Q2").get("Operating Income"),
+                self.quarter(2020, "Q1").get("Operating Income"),
+                self.year(2019).get("Operating Income"),
+                self.year(2018).get("Operating Income"),
+                self.year(2017).get("Operating Income"),
+                self.year(2016).get("Operating Income"),
+            ], "money"],
+            'Operating Income Ratio': [[
+                self.quarter(2020, "Q2").get("Operating Income Ratio"),
+                self.quarter(2020, "Q1").get("Operating Income Ratio"),
+                self.year(2019).get("Operating Income Ratio"),
+                self.year(2018).get("Operating Income Ratio"),
+                self.year(2017).get("Operating Income Ratio"),
+                self.year(2016).get("Operating Income Ratio"),
+            ], "ratio"],
+                'EPS': [[
+                self.quarter(2020, "Q2").get("EPS"),
+                self.quarter(2020, "Q1").get("EPS"),
+                self.year(2019).get("EPS"),
+                self.year(2018).get("EPS"),
+                self.year(2017).get("EPS"),
+                self.year(2016).get("EPS"),
+            ], "money"],
+        }

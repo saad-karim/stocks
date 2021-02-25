@@ -89,3 +89,87 @@ class FinancialRatios:
 
     def year(self, year):
         return self.yearlyRatios.year(year)
+
+    def output(self):
+        return {
+            'Gross Profit Margin': [[
+                self.quarter(2020, "Q2").get("Gross Profit Margin"),
+                self.quarter(2020, "Q1").get("Gross Profit Margin"),
+                self.year(2019).get("Gross Profit Margin"),
+                self.year(2018).get("Gross Profit Margin"),
+                self.year(2017).get("Gross Profit Margin"),
+                self.year(2016).get("Gross Profit Margin"),
+            ], "pct"],
+            'Operating Profit Margin': [[
+                self.quarter(2020, "Q2").get("Operating Profit Margin"),
+                self.quarter(2020, "Q1").get("Operating Profit Margin"),
+                self.year(2019).get("Operating Profit Margin"),
+                self.year(2018).get("Operating Profit Margin"),
+                self.year(2017).get("Operating Profit Margin"),
+                self.year(2016).get("Operating Profit Margin"),
+            ], "pct"],
+            'Net Profit Margin': [[
+                self.quarter(2020, "Q2").get("Net Profit Margin"),
+                self.quarter(2020, "Q1").get("Net Profit Margin"),
+                self.year(2019)["Net Profit Margin"],
+                self.year(2018)["Net Profit Margin"],
+                self.year(2017)["Net Profit Margin"],
+                self.year(2016)["Net Profit Margin"],
+            ], "pct"],
+            'Return on Assets': [[
+                self.quarter(2020, "Q2").get("Return on Assets"),
+                self.quarter(2020, "Q1").get("Return on Assets"),
+                self.year(2019).get("Return on Assets"),
+                self.year(2018).get("Return on Assets"),
+                self.year(2017).get("Return on Assets"),
+                self.year(2016).get("Return on Assets"),
+            ], "pct"],
+            'Return on Equity': [[
+                self.quarter(2020, "Q2").get("Return on Equity"),
+                self.quarter(2020, "Q1").get("Return on Equity"),
+                self.year(2019).get("Return on Equity"),
+                self.year(2018).get("Return on Equity"),
+                self.year(2017).get("Return on Equity"),
+                self.year(2016).get("Return on Equity"),
+            ], "pct"],
+            'Debt Equity Ratio': [[
+                self.quarter(2020, "Q2").get("Debt Equity Ratio"),
+                self.quarter(2020, "Q1").get("Debt Equity Ratio"),
+                self.year(2019).get("Debt Equity Ratio"),
+                self.year(2018).get("Debt Equity Ratio"),
+                self.year(2017).get("Debt Equity Ratio"),
+                self.year(2016).get("Debt Equity Ratio"),
+            ], "ratio"],
+            'Interest Coverage': [[
+                self.quarter(2020, "Q2").get("Interest Coverage"),
+                self.quarter(2020, "Q1").get("Interest Coverage"),
+                self.year(2019).get("Interest Coverage"),
+                self.year(2018).get("Interest Coverage"),
+                self.year(2017).get("Interest Coverage"),
+                self.year(2016).get("Interest Coverage"),
+            ], "ratio"],
+            'Price To Book Ratio': [[
+                self.quarter(2020, "Q2").get("Price To Book Ratio"),
+                self.quarter(2020, "Q1").get("Price To Book Ratio"),
+                self.year(2019).get("Price To Book Ratio"),
+                self.year(2018).get("Price To Book Ratio"),
+                self.year(2017).get("Price To Book Ratio"),
+                self.year(2016).get("Price To Book Ratio"),
+            ], "ratio"],
+            'Current Ratio': [[
+                self.quarter(2020, "Q2").get("Current Ratio"),
+                self.quarter(2020, "Q1").get("Current Ratio"),
+                self.year(2019).get("Current Ratio"),
+                self.year(2018).get("Current Ratio"),
+                self.year(2017).get("Current Ratio"),
+                self.year(2016).get("Current Ratio"),
+            ], "ratio"],
+            # 'Free Cash Flow Ratio': [[
+            #     stock.metrics.freeCashFlowRatio().quarter(2020, "Q2"),
+            #     stock.metrics.freeCashFlowRatio().quarter(2020, "Q1"),
+            #     stock.metrics.freeCashFlowRatio().year(2019),
+            #     stock.metrics.freeCashFlowRatio().year(2018),
+            #     stock.metrics.freeCashFlowRatio().year(2017),
+            #     stock.metrics.freeCashFlowRatio().year(2016),
+            # ], "ratio"],
+        }

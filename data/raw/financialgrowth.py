@@ -86,4 +86,24 @@ class FinancialGrowth:
 
     def ttmEPS(self):
         return self.quarterly.ttmEPS()
+    
+    def output(self):
+        return {
+            'EPS Growth': [[
+                self.quarter(2020, "Q2").get("EPS Growth"),
+                self.quarter(2020, "Q1").get("EPS Growth"),
+                self.year(2019).get("EPS Growth"),
+                self.year(2018).get("EPS Growth"),
+                self.year(2017).get("EPS Growth"),
+                self.year(2016).get("EPS Growth"),
+            ], "money"],
+            'Price Growth': [[
+                0,
+                0,
+                self.year(2019).get("Price Growth"),
+                self.year(2018).get("Price Growth"),
+                self.year(2017).get("Price Growth"),
+                # stock.priceGrowth.year(2016).get("Price Growth"),
+            ], "pct"],
+        }
 

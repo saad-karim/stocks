@@ -1,4 +1,4 @@
-import datetime
+import loader.date as loader
 
 def genRespWithYear(income, year):
     return {
@@ -17,10 +17,6 @@ def genRespWithYear(income, year):
         "EPS": income["eps"],
     }
 
-def getDate(dateStr):
-    date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
-    return date.year
-
 class Yearly:
 
     incomes = {}
@@ -35,7 +31,7 @@ class Yearly:
 
     def data(self, income):
         recordDate = income["date"]
-        year = getDate(recordDate)
+        year = loader.getDate(recordDate)
         return genRespWithYear(income, year)
 
     def year(self, year):
@@ -43,7 +39,6 @@ class Yearly:
 
 class Quarterly:
 
-    currentYear = datetime.datetime.now().year
     incomes = {}
 
     def __init__(self):
@@ -59,8 +54,7 @@ class Quarterly:
 
     def data(self, income):
         recordDate = income["date"]
-        year = getDate(recordDate)
-        # if year == self.currentYear:
+        year = loader.getDate(recordDate)
         qtr = genRespWithYear(income, year)
         qtr["Quarter"] = income["period"]
         return qtr

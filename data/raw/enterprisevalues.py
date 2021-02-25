@@ -1,4 +1,4 @@
-import datetime
+import loader.date as loader
 
 def genRespWithYear(raw, year):
     return {
@@ -6,22 +6,6 @@ def genRespWithYear(raw, year):
         "Number of Shares": raw["numberOfShares"],
         "Stock Price": raw["stockPrice"],
     }
-
-def getDate(dateStr):
-    date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
-    return date.year
-
-def getQuarter(dateStr):
-    date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
-    month = date.month
-    if month <= 3:
-        return "Q1"
-    elif month <= 6:
-        return "Q2"
-    elif month <= 9:
-        return "Q3"
-    else:
-        return "Q4"
 
 class Yearly:
 
@@ -37,7 +21,7 @@ class Yearly:
 
     def data(self, value):
         recordDate = value["date"]
-        year = getDate(recordDate)
+        year = loader.getDate(recordDate)
         return genRespWithYear(value, year)
 
     def year(self, year):
@@ -45,11 +29,7 @@ class Yearly:
 
 class Quarterly:
 
-    currentYear = datetime.datetime.now().year
-    values = {
-        # 2019: {},
-        # 2020: {},
-    }
+    values = {}
 
     def __init__(self):
         return
@@ -65,11 +45,9 @@ class Quarterly:
 
     def data(self, value):
         recordDate = value["date"]
-        year = getDate(recordDate)
-        # print("value: ", value)
-        # if year == self.currentYear:
+        year = loader.getDate(recordDate)
         qtr = genRespWithYear(value, year)
-        qtr["Quarter"] = getQuarter(recordDate)
+        qtr["Quarter"] = loader.getQuarter(recordDate)
 
         return qtr
 

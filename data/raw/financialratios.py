@@ -1,8 +1,4 @@
-import datetime
-
-def getDate(dateStr):
-    date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
-    return date.year
+import loader.date as loader
 
 def genRespWithYear(raw, year):
     return {
@@ -35,7 +31,7 @@ class Yearly:
 
     def genResp(self, raw):
         date = raw["date"]
-        year = getDate(date)
+        year = loader.getDate(date)
         return genRespWithYear(raw, year)
 
     def year(self, year):
@@ -43,7 +39,6 @@ class Yearly:
 
 class Quarterly:
 
-    currentYear = datetime.datetime.now().year
     ratios = {}
     numOfQtrs = 0
 
@@ -61,8 +56,7 @@ class Quarterly:
 
     def data(self, raw):
         recordDate = raw["date"]
-        year = getDate(recordDate)
-        # if year == self.currentYear:
+        year = loader.getDate(recordDate)
         qtr = genRespWithYear(raw, year)
         qtr["Quarter"] = "Q"+str(self.numOfQtrs)
         self.numOfQtrs+=1

@@ -75,8 +75,6 @@ stock = Stock(symb, stockapi, 10)
 stock.pullData()
 
 formatter = Formatter()
-rtd = formatter.realtimeData(stock)
-hd = formatter.historicData(stock)
 
 # Write gathered data to a properly formatted xls type file
 writer = Writer(symb)

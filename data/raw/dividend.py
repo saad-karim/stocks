@@ -160,3 +160,15 @@ class Dividend:
 
     def ttm(self):
         return self.quarterlyIncome.ttm()
+
+    def output(self):
+        return {
+            'Dividend': [[
+                self.quarter(2020, "Q2").get("Amount"),
+                self.quarter(2020, "Q1").get("Amount"),
+                self.year(2019).get("Amount"),
+                self.year(2018).get("Amount"),
+                self.year(2017).get("Amount"),
+                self.year(2016).get("Amount"),
+            ], "money"],
+        }

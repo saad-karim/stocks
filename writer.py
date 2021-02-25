@@ -88,7 +88,9 @@ class Writer:
 
         row += 2
         worksheet.write("A{0}".format(row), 'General', self.h3)
-        row = self.writeData(worksheet, row, formatter.historicData(stock))
+        row = self.writeData(worksheet, row, stock.enterpriseValues.output())
+        row = self.writeData(worksheet, row, stock.keyMetrics.output())
+        row = self.writeData(worksheet, row, stock.dividend.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Income', self.h3)

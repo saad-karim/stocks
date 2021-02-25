@@ -82,3 +82,39 @@ class KeyMetrics:
 
     def year(self, year):
         return self.yearly.year(year)
+    
+    def output(self):
+        return {
+            'Market Cap': [[
+                self.quarter(2020, "Q2").get("Market Cap"),
+                self.quarter(2020, "Q1").get("Market Cap"),
+                self.year(2019).get("Market Cap"),
+                self.year(2018).get("Market Cap"),
+                self.year(2017).get("Market Cap"),
+                self.year(2016).get("Market Cap"),
+            ], "money"],
+            'Shareholders Equity Per Share': [[
+                self.quarter(2020, "Q2").get("Shareholders Equity Per Share"),
+                self.quarter(2020, "Q1").get("Shareholders Equity Per Share"),
+                self.year(2019).get("Shareholders Equity Per Share"),
+                self.year(2018).get("Shareholders Equity Per Share"),
+                self.year(2017).get("Shareholders Equity Per Share"),
+                self.year(2016).get("Shareholders Equity Per Share"),
+            ], "money"],
+            'Book Value Per Share': [[
+                self.quarter(2020, "Q2").get("Book Value Per Share"),
+                self.quarter(2020, "Q1").get("Book Value Per Share"),
+                self.year(2019).get("Book Value Per Share"),
+                self.year(2018).get("Book Value Per Share"),
+                self.year(2017).get("Book Value Per Share"),
+                self.year(2016).get("Book Value Per Share"),
+            ], "money"],
+            'Tangible Book Value Per Share': [[
+                self.quarter(2020, "Q2").get("Tangible Book Value Per Share"),
+                self.quarter(2020, "Q1").get("Tangible Book Value Per Share"),
+                self.year(2019).get("Tangible Book Value Per Share"),
+                self.year(2018).get("Tangible Book Value Per Share"),
+                self.year(2017).get("Tangible Book Value Per Share"),
+                self.year(2016).get("Tangible Book Value Per Share"),
+            ], "money"],
+        }

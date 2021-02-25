@@ -86,3 +86,22 @@ class EnterpriseValues:
     def allYears(self):
         return self.yearly.allYears()
 
+    def output(self):
+        return {
+            'Price': [[
+                self.quarter(2020, "Q2").get("Stock Price"),
+                self.quarter(2020, "Q1").get("Stock Price"),
+                self.year(2019).get("Stock Price"),
+                self.year(2018).get("Stock Price"),
+                self.year(2017).get("Stock Price"),
+                self.year(2016).get("Stock Price"),
+            ], "num"],
+            'Number of Shares': [[
+                self.quarter(2020, "Q2").get("Number of Shares"),
+                self.quarter(2020, "Q1").get("Number of Shares"),
+                self.year(2019).get("Number of Shares"),
+                self.year(2018).get("Number of Shares"),
+                self.year(2017).get("Number of Shares"),
+                self.year(2016).get("Number of Shares"),
+            ], "num"],
+        }

@@ -33,80 +33,20 @@ class Formatter:
             # 'EBITDA',
         }
 
-    def incomeData(self, stock):
-        return income(stock)
+    # def incomeData(self, stock):
+    #     return income(stock)
 
-    def balanceSheetData(self, stock):
-        return balanceSheet(stock)
+    # def balanceSheetData(self, stock):
+    #     return balanceSheet(stock)
 
-    def cashflowData(self, stock):
-        return cashflow(stock)
+    # def cashflowData(self, stock):
+    #     return cashflow(stock)
 
-    def ratioData(self, stock):
-        return ratios(stock)
+    # def ratioData(self, stock):
+    #     return ratios(stock)
 
-    def growthData(self, stock):
-        return growth(stock)
-
-    def historicData(self, stock):
-        return {
-            'Price': [[
-                stock.enterpriseValues.quarter(2020, "Q2").get("Stock Price"),
-                stock.enterpriseValues.quarter(2020, "Q1").get("Stock Price"),
-                stock.enterpriseValues.year(2019).get("Stock Price"),
-                stock.enterpriseValues.year(2018).get("Stock Price"),
-                stock.enterpriseValues.year(2017).get("Stock Price"),
-                stock.enterpriseValues.year(2016).get("Stock Price"),
-            ], "num"],
-            'Number of Shares': [[
-                stock.enterpriseValues.quarter(2020, "Q2").get("Number of Shares"),
-                stock.enterpriseValues.quarter(2020, "Q1").get("Number of Shares"),
-                stock.enterpriseValues.year(2019).get("Number of Shares"),
-                stock.enterpriseValues.year(2018).get("Number of Shares"),
-                stock.enterpriseValues.year(2017).get("Number of Shares"),
-                stock.enterpriseValues.year(2016).get("Number of Shares"),
-            ], "num"],
-            'Market Cap': [[
-                stock.keyMetrics.quarter(2020, "Q2").get("Market Cap"),
-                stock.keyMetrics.quarter(2020, "Q1").get("Market Cap"),
-                stock.keyMetrics.year(2019).get("Market Cap"),
-                stock.keyMetrics.year(2018).get("Market Cap"),
-                stock.keyMetrics.year(2017).get("Market Cap"),
-                stock.keyMetrics.year(2016).get("Market Cap"),
-            ], "money"],
-            'Shareholders Equity Per Share': [[
-                stock.keyMetrics.quarter(2020, "Q2").get("Shareholders Equity Per Share"),
-                stock.keyMetrics.quarter(2020, "Q1").get("Shareholders Equity Per Share"),
-                stock.keyMetrics.year(2019).get("Shareholders Equity Per Share"),
-                stock.keyMetrics.year(2018).get("Shareholders Equity Per Share"),
-                stock.keyMetrics.year(2017).get("Shareholders Equity Per Share"),
-                stock.keyMetrics.year(2016).get("Shareholders Equity Per Share"),
-            ], "money"],
-            'Book Value Per Share': [[
-                stock.keyMetrics.quarter(2020, "Q2").get("Book Value Per Share"),
-                stock.keyMetrics.quarter(2020, "Q1").get("Book Value Per Share"),
-                stock.keyMetrics.year(2019).get("Book Value Per Share"),
-                stock.keyMetrics.year(2018).get("Book Value Per Share"),
-                stock.keyMetrics.year(2017).get("Book Value Per Share"),
-                stock.keyMetrics.year(2016).get("Book Value Per Share"),
-            ], "money"],
-            'Tangible Book Value Per Share': [[
-                stock.keyMetrics.quarter(2020, "Q2").get("Tangible Book Value Per Share"),
-                stock.keyMetrics.quarter(2020, "Q1").get("Tangible Book Value Per Share"),
-                stock.keyMetrics.year(2019).get("Tangible Book Value Per Share"),
-                stock.keyMetrics.year(2018).get("Tangible Book Value Per Share"),
-                stock.keyMetrics.year(2017).get("Tangible Book Value Per Share"),
-                stock.keyMetrics.year(2016).get("Tangible Book Value Per Share"),
-            ], "money"],
-            'Dividend': [[
-                stock.dividend.quarter(2020, "Q2").get("Amount"),
-                stock.dividend.quarter(2020, "Q1").get("Amount"),
-                stock.dividend.year(2019).get("Amount"),
-                stock.dividend.year(2018).get("Amount"),
-                stock.dividend.year(2017).get("Amount"),
-                stock.dividend.year(2016).get("Amount"),
-            ], "money"],
-        }
+    # def growthData(self, stock):
+    #     return growth(stock)
 
     def output(self):
         for metric in self.metrics:

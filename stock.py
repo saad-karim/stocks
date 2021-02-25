@@ -116,10 +116,10 @@ class Stock:
         wc = self.keyMetrics.year(2018)["Working Capital"]
         shares = self.keyStats.output()["Shares Outstanding"]
 
-        print("!!SK >>> price: ", price)
-        print("!!SK >>> wc: ", wc)
-        print("!!SK >>> wc/share: ", (wc / shares))
-        print("!!SK >>> p/wc: ", price / (wc / shares))
+        # print("!!SK >>> price: ", price)
+        # print("!!SK >>> wc: ", wc)
+        # print("!!SK >>> wc/share: ", (wc / shares))
+        # print("!!SK >>> p/wc: ", price / (wc / shares))
 
         data.update({
             "TTM Dividend Yield": ttmDiv / price,

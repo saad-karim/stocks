@@ -100,7 +100,7 @@ class Writer:
 
         row += 2
         worksheet.write("A{0}".format(row), 'Cash Flow', self.h3)
-        row = self.writeData(worksheet, row, formatter.cashflowData(stock))
+        row = self.writeData(worksheet, row, stock.cashFlow.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Ratios', self.h3)

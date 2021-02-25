@@ -14,41 +14,44 @@ def genRespWithYear(raw, year):
 
 class Yearly:
 
-    cashflows = {}
+    __cashflows = {} # Private attribute, load method should be use to fill this
 
     def __init__(self):
         return
 
     def load(self, cashflows):
         for cashflow in cashflows:
-            resp = self.data(cashflow)
-            self.cashflows[resp["Year"]] = resp
+            resp = self.__data(cashflow)
+            self.__cashflows[resp["Year"]] = resp
 
-    def data(self, cashflow):
+    def __data(self, cashflow):
         recordDate = cashflow["date"]
         year = loader.getDate(recordDate)
         return genRespWithYear(cashflow, year)
 
     def year(self, year):
-        return self.cashflows[year]
+        return self.__cashflows[year]
+
+    def allYears(self):
+        return self.__cashflows
 
 class Quarterly:
 
-    cashflows = {}
+    __cashflows = {} # Private attribute, load method should be use to fill this
 
     def __init__(self):
         return
 
     def load(self, cashflows):
         for cashflow in cashflows:
-            resp = self.data(cashflow)
+            resp = self.__data(cashflow)
             if resp != None:
-                self.cashflows[resp["Year"]] = {
+                self.__cashflows[resp["Year"]] = {
                     resp["Quarter"]: resp,
                 }
 
-    def data(self, cashflow):
-        print(cashflow)
+    def __data(self, cashflow):
+        # print(cashflow)
         recordDate = cashflow["date"]
         year = loader.getDate(recordDate)
         qtr = genRespWithYear(cashflow, year)
@@ -56,10 +59,13 @@ class Quarterly:
         return qtr
 
     def quarter(self, year, qtr):
-        if qtr in self.cashflows[year]:
-            return self.cashflows[year][qtr]
+        if qtr in self.__cashflows[year]:
+            return self.__cashflows[year][qtr]
 
         return {}
+
+    def allQtrs(self):
+        return self.__cashflows
 
 class CashFlow:
 
@@ -78,13 +84,73 @@ class CashFlow:
         return self
 
     def allQtrs(self):
-        return self.quarterly.cashflows
+        return self.quarterly.allQtrs()
 
     def quarter(self, year, qtr):
         return self.quarterly.quarter(year, qtr)
 
     def allYears(self):
-        return self.yearly.cashflows
+        return self.yearly.allYears()
 
     def year(self, year):
         return self.yearly.year(year)
+
+    def output(self):
+        return {
+            'Free Cash Flow': [[
+                self.quarter(2020, "Q2").get("Free Cash Flow"),
+                self.quarter(2020, "Q1").get("Free Cash Flow"),
+                self.year(2019).get("Free Cash Flow"),
+                self.year(2018).get("Free Cash Flow"),
+                self.year(2017).get("Free Cash Flow"),
+                self.year(2016).get("Free Cash Flow"),
+            ], "money"],
+            'Acquisitions': [[
+                self.quarter(2020, "Q2").get("Acquisitions"),
+                self.quarter(2020, "Q1").get("Acquisitions"),
+                self.year(2019).get("Acquisitions"),
+                self.year(2018).get("Acquisitions"),
+                self.year(2017).get("Acquisitions"),
+                self.year(2016).get("Acquisitions"),
+            ], "money"],
+            'Stock Buyback': [[
+                self.quarter(2020, "Q2").get("Stock Buyback"),
+                self.quarter(2020, "Q1").get("Stock Buyback"),
+                self.year(2019).get("Stock Buyback"),
+                self.year(2018).get("Stock Buyback"),
+                self.year(2017).get("Stock Buyback"),
+                self.year(2016).get("Stock Buyback"),
+            ], "money"],
+            'Net Change in Cash': [[
+                self.quarter(2020, "Q2").get("Net Change in Cash"),
+                self.quarter(2020, "Q1").get("Net Change in Cash"),
+                self.year(2019).get("Net Change in Cash"),
+                self.year(2018).get("Net Change in Cash"),
+                self.year(2017).get("Net Change in Cash"),
+                self.year(2016).get("Net Change in Cash"),
+            ], "money"],
+            'Operating Cash Flow': [[
+                self.quarter(2020, "Q2").get("Operating Cash Flow"),
+                self.quarter(2020, "Q1").get("Operating Cash Flow"),
+                self.year(2019).get("Operating Cash Flow"),
+                self.year(2018).get("Operating Cash Flow"),
+                self.year(2017).get("Operating Cash Flow"),
+                self.year(2016).get("Operating Cash Flow"),
+            ], "money"],
+            'Investing Cash Flow': [[
+                self.quarter(2020, "Q2").get("Investing Cash Flow"),
+                self.quarter(2020, "Q1").get("Investing Cash Flow"),
+                self.year(2019).get("Investing Cash Flow"),
+                self.year(2018).get("Investing Cash Flow"),
+                self.year(2017).get("Investing Cash Flow"),
+                self.year(2016).get("Investing Cash Flow"),
+            ], "money"],
+            'Financing Cash Flow': [[
+                self.quarter(2020, "Q2").get("Financing Cash Flow"),
+                self.quarter(2020, "Q1").get("Financing Cash Flow"),
+                self.year(2019).get("Financing Cash Flow"),
+                self.year(2018).get("Financing Cash Flow"),
+                self.year(2017).get("Financing Cash Flow"),
+                self.year(2016).get("Financing Cash Flow"),
+            ], "money"],
+        }

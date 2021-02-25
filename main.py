@@ -71,7 +71,7 @@ if envir == "sandbox":
 # - Entering new/creating markets
 
 stock = Stock(symb, stockapi, 10)
-stock.pullData()
+stock.pullData(timeout=.5)
 
 # Write gathered data to a properly formatted xls type file
 writer = Writer(stock)

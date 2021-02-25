@@ -10,7 +10,9 @@ from data.raw.cashflow import CashFlow
 from data.raw.enterprisevalues import EnterpriseValues
 from data.raw.financialgrowth import FinancialGrowth
 from data.metrics.growth.price import Price as PriceGrowth
+from api.api import Annual, Quarter
 from metrics import Metrics
+import time
 
 class Stock:
 
@@ -32,36 +34,52 @@ class Stock:
         self.financialGrowth = FinancialGrowth()
         self.priceGrowth = PriceGrowth()
 
-    def pullData(self):
+    def pullData(self, timeout):
         api = self.api
         symb = self.symb
 
-        self.keyStatsResp = api.keyStats(symb)
+        # Non-historical data
+        self.keyStats.parse(api.keyStats(symb))
         self.advancedKeyStatsResp = api.advancedKeyStats(symb)
         self.priceResp = api.price(symb)
 
-        self.dividendResp = api.dividend(symb)
+        dividendResp = api.dividend(symb)
+        self.dividend.loadYearlyData(dividendResp)
+        self.dividend.loadQuarterlyData(dividendResp)
 
-        self.incomeResp = api.income(symb, "annual")
-        self.incomeQtrResp = api.income(symb, "quarter")
+        # Historical data provided on annual and quarterly bases
+        self.income.loadYearlyData(api.income(symb, Annual))
+        self.income.loadQuarterlyData(api.income(symb, Quarter))
 
-        self.balanceSheetResp = api.balanceSheet(symb, "annual")
-        self.balanceSheetQtrResp = api.balanceSheet(symb, "quarter")
+        time.sleep(timeout)
 
-        self.ratiosResp = api.financialRatios(symb, "annual")
-        self.ratiosQtrResp = api.financialRatios(symb, "quarter")
+        self.keyMetrics.loadYearlyData(api.keyMetrics(symb, Annual))
+        self.keyMetrics.loadQuarterlyData(api.keyMetrics(symb, Quarter))
 
-        self.keyMetricsResp = api.keyMetrics(symb, "annual")
-        self.keyMetricsQtrResp = api.keyMetrics(symb, "quarter")
+        time.sleep(timeout)
 
-        self.cashFlowResp = api.cashFlow(symb, "annual")
-        self.cashFlowQtrResp = api.cashFlow(symb, "quarter")
+        self.balanceSheet.loadYearlyData(api.balanceSheet(symb, Annual))
+        self.balanceSheet.loadQuarterlyData(api.balanceSheet(symb, Quarter))
 
-        self.enterpriseValuesResp = api.enterpriseValues(symb, "annual")
-        self.enterpriseValuesQtrResp = api.enterpriseValues(symb, "quarter")
+        time.sleep(timeout)
 
-        self.financialGrowthResp = api.financialGrowth(symb, "annual")
-        self.financialGrowthQtrResp = api.financialGrowth(symb, "quarter")
+        self.ratios.loadYearlyData(api.financialRatios(symb, Annual))
+        self.ratios.loadQuarterlyData(api.financialRatios(symb, Quarter))
+
+        time.sleep(timeout)
+
+        self.cashFlow.loadYearlyData(api.cashFlow(symb, Annual))
+        self.cashFlow.loadQuarterlyData(api.cashFlow(symb, Quarter))
+
+        time.sleep(timeout)
+
+        self.enterpriseValues.loadYearlyData(api.enterpriseValues(symb, Annual))
+        self.enterpriseValues.loadQuarterlyData(api.enterpriseValues(symb, Quarter))
+
+        time.sleep(timeout)
+
+        self.financialGrowth.loadYearlyData(api.financialGrowth(symb, Annual))
+        self.financialGrowth.loadQuarterlyData(api.financialGrowth(symb, Quarter))
 
     def parseMetrics(self):
         # self.metrics = Metrics(self.price.resp, self.advancedKeyStats.resp, self.keyStats.resp, self.income.resps, self.balanceSheet.resps)
@@ -70,19 +88,18 @@ class Stock:
         fcf = self.cashFlow.year(2019)["Free Cash Flow"]
         metrics.update(self.metrics.intrinsicValue(fcf, .03, .06, .10, 10))
 
-
         return metrics
 
     def realtimeData(self):
-        m = self.getData()
+        m = self.processData()
         return {
-            'Ticker': m['Ticker'],
-            'Realtime Price': [m['Realtime Price'], "money"],
+            "Ticker": self.symb,
+            "Realtime Price": '=GOOGLEFINANCE("{0}", "price")'.format(self.symb),
+            "EPS": '=GOOGLEFINANCE("{0}", "eps")'.format(self.symb),
+            "PE Ratio": '=GOOGLEFINANCE("{0}", "pe")'.format(self.symb),
             'Price Used for Calculations': [m['Price Used for Calculations'], "money"],
             'Intrinsic Value': [m['Intrinsic Value'], "money"],
             'Shares Outstanding': [m['Shares Outstanding'], "num"],
-            'PE Ratio': m['PE Ratio'],
-            'EPS': m['EPS'],
             'TTM Dividend Yield': [m['TTM Dividend Yield'], "pct"],
             'TTM EPS': [m['TTM EPS'], "money"],
             'TTM Dividend Rate': [m['TTM Dividend'], "money"],
@@ -97,44 +114,13 @@ class Stock:
         }
 
 
-    def getData(self):
-        data = {
-            "Ticker": self.symb,
-            "Realtime Price": '=GOOGLEFINANCE("{0}", "price")'.format(self.symb),
-            "EPS": '=GOOGLEFINANCE("{0}", "eps")'.format(self.symb),
-            "PE Ratio": '=GOOGLEFINANCE("{0}", "pe")'.format(self.symb),
-        }
-
-        self.income.loadYearlyData(self.incomeResp)
-        self.income.loadQuarterlyData(self.incomeQtrResp)
-
-        self.keyMetrics.loadYearlyData(self.keyMetricsResp)
-        self.keyMetrics.loadQuarterlyData(self.keyMetricsQtrResp)
-
-        self.balanceSheet.loadYearlyData(self.balanceSheetResp)
-        self.balanceSheet.loadQuarterlyData(self.balanceSheetQtrResp)
-
-        self.ratios.loadYearlyData(self.ratiosResp)
-        self.ratios.loadQuarterlyData(self.ratiosQtrResp)
-
-        self.dividend.loadYearlyData(self.dividendResp)
-        self.dividend.loadQuarterlyData(self.dividendResp)
-
-        self.cashFlow.loadYearlyData(self.cashFlowResp)
-        self.cashFlow.loadQuarterlyData(self.cashFlowQtrResp)
-
-        self.enterpriseValues.loadYearlyData(self.enterpriseValuesResp)
-        self.enterpriseValues.loadQuarterlyData(self.enterpriseValuesQtrResp)
-
-        self.financialGrowth.loadYearlyData(self.financialGrowthResp)
-        self.financialGrowth.loadQuarterlyData(self.financialGrowthQtrResp)
+    def processData(self):
+        data = {}
 
         self.priceGrowth.calc(self.enterpriseValues)
 
         self.price.parse(self.priceResp)
         price = self.price.output()["Price"]
-
-        self.keyStats.parse(self.keyStatsResp)
 
         ttmDiv = self.dividend.ttm()
         wc = self.keyMetrics.year(2018)["Working Capital"]

@@ -70,13 +70,13 @@ class Price:
         return
 
     def calc(self, ev):
-        for year in ev.yearly.values:
-            price = ev.yearly.values[year]["Stock Price"]
+        for year in ev.allYears():
+            price = ev.year(year)["Stock Price"]
             # print("price: ", price)
 
             prevYear = year - 1
-            if prevYear in ev.yearly.values.keys():
-                prevYearPrice = ev.yearly.values[year-1]["Stock Price"]
+            if prevYear in ev.allYears().keys():
+                prevYearPrice = ev.year(year-1)["Stock Price"]
                 # print("prev year price: ", prevYearPrice)
 
                 priceDiff = price - prevYearPrice

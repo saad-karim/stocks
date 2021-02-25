@@ -9,7 +9,7 @@ def genRespWithYear(raw, year):
 
 class Yearly:
 
-    values = {}
+    __values = {}
 
     def __init__(self):
         return
@@ -17,7 +17,7 @@ class Yearly:
     def load(self, values):
         for value in values:
             resp = self.data(value)
-            self.values[resp["Year"]] = resp
+            self.__values[resp["Year"]] = resp
 
     def data(self, value):
         recordDate = value["date"]
@@ -25,11 +25,14 @@ class Yearly:
         return genRespWithYear(value, year)
 
     def year(self, year):
-        return self.values[year]
+        return self.__values[year]
+
+    def allYears(self):
+        return self.__values
 
 class Quarterly:
 
-    values = {}
+    __values = {}
 
     def __init__(self):
         return
@@ -39,7 +42,7 @@ class Quarterly:
             resp = self.data(value)
             if resp != None:
                 # print(resp)
-                self.values[resp["Year"]] = {
+                self.__values[resp["Year"]] = {
                     resp["Quarter"]: resp,
                 }
 
@@ -53,8 +56,8 @@ class Quarterly:
 
     def quarter(self, year, qtr):
         # print(self.values)
-        if qtr in self.values[year]:
-            return self.values[year][qtr]
+        if qtr in self.__values[year]:
+            return self.__values[year][qtr]
 
         return {}
 
@@ -79,4 +82,7 @@ class EnterpriseValues:
 
     def year(self, year):
         return self.yearly.year(year)
+    
+    def allYears(self):
+        return self.yearly.allYears()
 

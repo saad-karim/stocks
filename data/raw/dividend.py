@@ -33,7 +33,7 @@ def getQuarter(dateStr):
 
 class Yearly:
 
-    savedDivs = {}
+    __savedDivs = {}
 
     def __init__(self):
         return
@@ -57,7 +57,7 @@ class Yearly:
                     else:
                         divAmount = Decimal(nextDiv["adjDividend"])
 
-                    self.savedDivs.update({
+                    self.__savedDivs.update({
                         nextDivYear: {
                             "Amount": divAmount,
                         }
@@ -67,7 +67,7 @@ class Yearly:
                     divAmount = divAmount + Decimal(nextDiv["adjDividend"])
                     pos+= 1
                 else:
-                    self.savedDivs.update({
+                    self.__savedDivs.update({
                         year: {
                             "Amount": divAmount,
                         }
@@ -84,11 +84,11 @@ class Yearly:
         return genRespWithYear(income, year)
 
     def year(self, year):
-        return self.savedDivs[year]
+        return self.__savedDivs[year]
 
 class Quarterly:
 
-    savedDivs = {}
+    __savedDivs = {}
 
     def __init__(self):
         return
@@ -101,9 +101,9 @@ class Quarterly:
             year = getYear(div["date"])
             qtr = getQuarter(div["date"])
 
-            saved = self.savedDivs.get(year)
+            saved = self.__savedDivs.get(year)
             if saved == None:
-                self.savedDivs.update({
+                self.__savedDivs.update({
                     year: {
                         qtr: {
                             "Amount": div["adjDividend"],
@@ -111,7 +111,7 @@ class Quarterly:
                     }
                 })
             else:
-                self.savedDivs[year].update( {
+                self.__savedDivs[year].update( {
                         qtr: {
                             "Amount": div["adjDividend"],
                         }
@@ -119,16 +119,16 @@ class Quarterly:
             i+=1
 
     def quarter(self, year, qtr):
-        if qtr in self.savedDivs[year]:
-            return self.savedDivs[year][qtr]
+        if qtr in self.__savedDivs[year]:
+            return self.__savedDivs[year][qtr]
 
         return {}
 
     def ttm(self):
         addedQtrs = 0
         total = 0
-        for year in self.savedDivs:
-            qtrs = self.savedDivs.get(year)
+        for year in self.__savedDivs:
+            qtrs = self.__savedDivs.get(year)
             for qtr in qtrs:
                 total = total + qtrs[qtr]["Amount"]
                 addedQtrs+=1

@@ -13,7 +13,7 @@ def genRespWithYear(raw, year):
 
 class Yearly:
 
-    metrics = {}
+    __metrics = {}
 
     def __init__(self):
         return
@@ -21,7 +21,7 @@ class Yearly:
     def load(self, metrics):
         for metric in metrics:
             resp = self.data(metric)
-            self.metrics[resp["Year"]] = resp
+            self.__metrics[resp["Year"]] = resp
 
     def data(self, metric):
         recordDate = metric["date"]
@@ -29,11 +29,11 @@ class Yearly:
         return genRespWithYear(metric, year)
 
     def year(self, year):
-        return self.metrics[year]
+        return self.__metrics[year]
 
 class Quarterly:
 
-    metrics = {}
+    __metrics = {}
     numOfQtrs = 0
 
     def __init__(self):
@@ -43,7 +43,7 @@ class Quarterly:
         for metric in metrics:
             resp = self.data(metric)
             if resp != None:
-                self.metrics[resp["Year"]] = {
+                self.__metrics[resp["Year"]] = {
                     resp["Quarter"]: resp,
                 }
 
@@ -56,8 +56,8 @@ class Quarterly:
         return qtr
 
     def quarter(self, year, qtr):
-        if qtr in self.metrics[year]:
-            return self.metrics[year][qtr]
+        if qtr in self.__metrics[year]:
+            return self.__metrics[year][qtr]
 
         return {}
 

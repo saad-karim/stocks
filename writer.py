@@ -6,11 +6,12 @@ log = logging.getLogger("writer")
 
 class Writer:
 
-    def __init__(self, symb):
-        filename = "./output/" + symb + ".xls"
-        log.info("Writing to file %s", filename)
+    def __init__(self, stock):
+        self.symb = stock.symb
+        self.stock = stock
 
-        self.symb = symb
+        filename = "./output/" + stock.symb + ".xls"
+        log.info("Writing to file %s", filename)
 
         self.workbook = xlsxwriter.Workbook(filename)
 
@@ -51,7 +52,8 @@ class Writer:
             row += 1
         return row
 
-    def writef(self, formatter, stock):
+    def writef(self):
+        stock = self.stock
 
         worksheet = self.workbook.add_worksheet(self.symb)
 
@@ -62,7 +64,7 @@ class Writer:
         row = 3
         col = 0
 
-        rt = formatter.realtimeData(stock)
+        rt = stock.realtimeData()
         for key, value in rt.items():
             worksheet.write(row, col, key, self.bold)
 

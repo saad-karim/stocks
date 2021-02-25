@@ -73,6 +73,30 @@ class Stock:
 
         return metrics
 
+    def realtimeData(self):
+        m = self.getData()
+        return {
+            'Ticker': m['Ticker'],
+            'Realtime Price': [m['Realtime Price'], "money"],
+            'Price Used for Calculations': [m['Price Used for Calculations'], "money"],
+            'Intrinsic Value': [m['Intrinsic Value'], "money"],
+            'Shares Outstanding': [m['Shares Outstanding'], "num"],
+            'PE Ratio': m['PE Ratio'],
+            'EPS': m['EPS'],
+            'TTM Dividend Yield': [m['TTM Dividend Yield'], "pct"],
+            'TTM EPS': [m['TTM EPS'], "money"],
+            'TTM Dividend Rate': [m['TTM Dividend'], "money"],
+            'Price to Working Capital': [m['Price to Working Capital'], "num"],
+            # 'Market Cap / Total Equity',
+            # 'Book Value',
+            # 'Tangible Book Value / Share',
+            # 'Market Capitalization',
+            # 'Price/Sales Ratio',
+            # 'Total Cash',
+            # 'EBITDA',
+        }
+
+
     def getData(self):
         data = {
             "Ticker": self.symb,
@@ -137,10 +161,8 @@ class Stock:
             "Price Used for Calculations": price["Price"],
         })
 
-        # data.update(self.keyStats.parse(self.keyStatsResp).output())
-        data.update(self.keyStats.output())
-        data.update(self.advancedKeyStats.parse(self.advancedKeyStatsResp).output())
-        data.update(self.parseMetrics())
-
+        data.update(self.keyStats.output()) # Shares outstanding
+        # data.update(self.advancedKeyStats.parse(self.advancedKeyStatsResp).output())
+        data.update(self.parseMetrics()) # Instrinsic value
 
         return data

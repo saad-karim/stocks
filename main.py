@@ -10,7 +10,6 @@ import sys
 import xlsxwriter
 import argparse
 from stock import Stock
-from formatter.formatter import Formatter
 from writer import Writer
 
 logging.basicConfig(level="INFO")
@@ -74,8 +73,6 @@ if envir == "sandbox":
 stock = Stock(symb, stockapi, 10)
 stock.pullData()
 
-formatter = Formatter()
-
 # Write gathered data to a properly formatted xls type file
-writer = Writer(symb)
-writer.writef(formatter, stock)
+writer = Writer(stock)
+writer.writef()

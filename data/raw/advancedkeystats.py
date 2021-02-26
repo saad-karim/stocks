@@ -1,5 +1,4 @@
-import datetime
-
+# Does not contain any historical data
 class AdvancedKeyStats:
 
     resp = {}

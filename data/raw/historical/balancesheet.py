@@ -1,4 +1,5 @@
-import datetime
+import loader.date as loader
+import data.raw.historical.format as formatter
 
 def genRespWithYear(balanceSheet, year):
     return {
@@ -9,13 +10,9 @@ def genRespWithYear(balanceSheet, year):
         "Cash": balanceSheet["cashAndCashEquivalents"],
     }
 
-def getDate(dateStr):
-    date = datetime.datetime.strptime(dateStr, "%Y-%m-%d").date()
-    return date.year
-
 class Yearly:
 
-    sheets = {}
+    __sheets = {}
 
     def __init__(self):
         return
@@ -23,21 +20,22 @@ class Yearly:
     def load(self, sheets):
         for sheet in sheets:
             resp = self.data(sheet)
-            self.sheets[resp["Year"]] = resp
+            self.__sheets[resp["Year"]] = resp
 
     def data(self, sheet):
-        # recordDate = sheet["fillingDate"]
         recordDate = sheet["date"]
-        year = getDate(recordDate)
+        year = loader.getDate(recordDate)
         return genRespWithYear(sheet, year)
 
     def year(self, year):
-        return self.sheets[year]
+        return self.__sheets[year]
+
+    def allYears(self):
+        return self.__sheets
 
 class Quarterly:
 
-    currentYear = datetime.datetime.now().year
-    sheets = {}
+    __sheets = {}
 
     def __init__(self):
         return
@@ -46,24 +44,27 @@ class Quarterly:
         for sheet in sheets:
             resp = self.data(sheet)
             if resp != None:
-                self.sheets[resp["Year"]] = {
+                self.__sheets[resp["Year"]] = {
                     resp["Quarter"]: resp,
                 }
 
     def data(self, sheet):
         # recordDate = sheet["fillingDate"]
         recordDate = sheet["date"]
-        year = getDate(recordDate)
-        # if year == self.currentYear:
+        year = loader.getDate(recordDate)
         qtr = genRespWithYear(sheet, year)
         qtr["Quarter"] = sheet["period"]
         return qtr
 
     def quarter(self, year, qtr):
-        if qtr in self.sheets[year]:
-            return self.sheets[year][qtr]
+        if year in self.__sheets:
+            if qtr in self.__sheets[year]:
+                return self.__sheets[year][qtr]
 
         return {}
+
+    def allQtrs(self):
+        return self.__sheets
 
 class BalanceSheet:
 
@@ -86,3 +87,11 @@ class BalanceSheet:
 
     def year(self, year):
         return self.yearly.year(year)
+
+    def output(self):
+        return {
+            'Cash': [formatter.generate(self, "Cash"), "money"],
+            'Current Assets': [formatter.generate(self, "Current Assets"), "money"],
+            'Current Liabilities': [formatter.generate(self, "Current Liabilities"), "money"],
+            'Shareholder Equity': [formatter.generate(self, "Shareholder Equity"), "money"],
+        }

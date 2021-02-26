@@ -1,4 +1,5 @@
-import datetime
+import loader.date as loader
+import data.raw.historical.format as formatter
 
 def genRespWithYear(raw, year):
     return {
@@ -7,25 +8,9 @@ def genRespWithYear(raw, year):
         "Stock Price": raw["stockPrice"],
     }
 
-def getDate(dateStr):
-    date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
-    return date.year
-
-def getQuarter(dateStr):
-    date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
-    month = date.month
-    if month <= 3:
-        return "Q1"
-    elif month <= 6:
-        return "Q2"
-    elif month <= 9:
-        return "Q3"
-    else:
-        return "Q4"
-
 class Yearly:
 
-    values = {}
+    __values = {}
 
     def __init__(self):
         return
@@ -33,23 +18,22 @@ class Yearly:
     def load(self, values):
         for value in values:
             resp = self.data(value)
-            self.values[resp["Year"]] = resp
+            self.__values[resp["Year"]] = resp
 
     def data(self, value):
         recordDate = value["date"]
-        year = getDate(recordDate)
+        year = loader.getDate(recordDate)
         return genRespWithYear(value, year)
 
     def year(self, year):
-        return self.values[year]
+        return self.__values[year]
+
+    def allYears(self):
+        return self.__values
 
 class Quarterly:
 
-    currentYear = datetime.datetime.now().year
-    values = {
-        # 2019: {},
-        # 2020: {},
-    }
+    __values = {}
 
     def __init__(self):
         return
@@ -59,26 +43,27 @@ class Quarterly:
             resp = self.data(value)
             if resp != None:
                 # print(resp)
-                self.values[resp["Year"]] = {
+                self.__values[resp["Year"]] = {
                     resp["Quarter"]: resp,
                 }
 
     def data(self, value):
         recordDate = value["date"]
-        year = getDate(recordDate)
-        # print("value: ", value)
-        # if year == self.currentYear:
+        year = loader.getDate(recordDate)
         qtr = genRespWithYear(value, year)
-        qtr["Quarter"] = getQuarter(recordDate)
+        qtr["Quarter"] = loader.getQuarter(recordDate)
 
         return qtr
 
     def quarter(self, year, qtr):
-        # print(self.values)
-        if qtr in self.values[year]:
-            return self.values[year][qtr]
+        if year in self.__values:
+            if qtr in self.__values[year]:
+                return self.__values[year][qtr]
 
         return {}
+
+    def allQuarters(self):
+        return self.__values
 
 class EnterpriseValues:
 
@@ -101,4 +86,25 @@ class EnterpriseValues:
 
     def year(self, year):
         return self.yearly.year(year)
+    
+    def allYears(self):
+        return self.yearly.allYears()
 
+    def allQuarters(self):
+        return self.quarterly.allQuarters()
+    
+    def getAllValues(self, key):
+        values = []
+        for qtr in self.allQuarters().values():
+            values.append(qtr.get(key))
+
+        for year in self.allYears().values():
+            values.append(year.get(key))
+        
+        return values
+
+    def output(self):
+        return {
+            'Price': [formatter.generate(self, "Stock Price"), "num"],
+            'Number of Shares': [formatter.generate(self, "Number of Shares"), "num"],
+        }

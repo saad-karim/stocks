@@ -6,11 +6,12 @@ log = logging.getLogger("writer")
 
 class Writer:
 
-    def __init__(self, symb):
-        filename = "./output/" + symb + ".xls"
-        log.info("Writing to file %s", filename)
+    def __init__(self, stock):
+        self.symb = stock.symb
+        self.stock = stock
 
-        self.symb = symb
+        filename = "./output/" + stock.symb + ".xls"
+        log.info("Writing to file %s", filename)
 
         self.workbook = xlsxwriter.Workbook(filename)
 
@@ -44,14 +45,18 @@ class Writer:
                 fmt = values[1]
                 values = values[0]
 
-            for value in values:
-                worksheet.write(row, col, value, self.entryType(fmt))
-                col += 1
+            if isinstance(values, list):
+                for value in values:
+                    worksheet.write(row, col, value, self.entryType(fmt))
+                    col += 1
+            else:
+                worksheet.write(row, col, values, self.entryType(fmt))
 
             row += 1
         return row
 
-    def writef(self, formatter, stock):
+    def writef(self):
+        stock = self.stock
 
         worksheet = self.workbook.add_worksheet(self.symb)
 
@@ -62,7 +67,7 @@ class Writer:
         row = 3
         col = 0
 
-        rt = formatter.realtimeData(stock)
+        rt = stock.realtimeData()
         for key, value in rt.items():
             worksheet.write(row, col, key, self.bold)
 
@@ -79,7 +84,7 @@ class Writer:
         currentYear = datetime.datetime.now().year
         currentYearStr = str(currentYear)
 
-        qtrs = [currentYearStr+"-Q2", currentYearStr+"-Q1"]
+        qtrs = [currentYearStr+"-Q4", currentYearStr+"-Q3", currentYearStr+"-Q2", currentYearStr+"-Q1"]
         for col_num, qtr in enumerate(qtrs):
             worksheet.write(row-1, col_num+1, qtr, self.h2)
 
@@ -88,27 +93,33 @@ class Writer:
 
         row += 2
         worksheet.write("A{0}".format(row), 'General', self.h3)
-        row = self.writeData(worksheet, row, formatter.historicData(stock))
+        row = self.writeData(worksheet, row, stock.rawData.enterpriseValues.output())
+        row = self.writeData(worksheet, row, stock.rawData.keyMetrics.output())
+        row = self.writeData(worksheet, row, stock.rawData.dividend.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Income', self.h3)
-        row = self.writeData(worksheet, row, formatter.incomeData(stock))
+        row = self.writeData(worksheet, row, stock.rawData.income.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Balance Sheet', self.h3)
-        row = self.writeData(worksheet, row, formatter.balanceSheetData(stock))
+        row = self.writeData(worksheet, row, stock.rawData.balanceSheet.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Cash Flow', self.h3)
-        row = self.writeData(worksheet, row, formatter.cashflowData(stock))
+        row = self.writeData(worksheet, row, stock.rawData.cashFlow.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Ratios', self.h3)
-        row = self.writeData(worksheet, row, formatter.ratioData(stock))
+        row = self.writeData(worksheet, row, stock.rawData.ratios.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Growth', self.h3)
-        row = self.writeData(worksheet, row, formatter.growthData(stock))
+        row = self.writeData(worksheet, row, stock.rawData.financialGrowth.output())
+
+        row += 2
+        worksheet.write("A{0}".format(row), 'Metrics', self.h3)
+        row = self.writeData(worksheet, row, stock.realtimeMetrics())
 
         self.workbook.close()
 

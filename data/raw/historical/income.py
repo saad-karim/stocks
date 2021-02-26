@@ -1,4 +1,6 @@
-import datetime
+import loader.date as loader
+import data.raw.historical.format as formatter
+from collections import defaultdict
 
 def genRespWithYear(income, year):
     return {
@@ -17,10 +19,6 @@ def genRespWithYear(income, year):
         "EPS": income["eps"],
     }
 
-def getDate(dateStr):
-    date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
-    return date.year
-
 class Yearly:
 
     incomes = {}
@@ -35,7 +33,7 @@ class Yearly:
 
     def data(self, income):
         recordDate = income["date"]
-        year = getDate(recordDate)
+        year = loader.getDate(recordDate)
         return genRespWithYear(income, year)
 
     def year(self, year):
@@ -43,8 +41,7 @@ class Yearly:
 
 class Quarterly:
 
-    currentYear = datetime.datetime.now().year
-    incomes = {}
+    incomes = defaultdict(list)
 
     def __init__(self):
         return
@@ -53,21 +50,21 @@ class Quarterly:
         for income in incomes:
             resp = self.data(income)
             if resp != None:
-                self.incomes[resp["Year"]] = {
+                self.incomes[resp["Year"]].append({
                     resp["Quarter"]: resp,
-                }
+                })
 
     def data(self, income):
         recordDate = income["date"]
-        year = getDate(recordDate)
-        # if year == self.currentYear:
+        year = loader.getDate(recordDate)
         qtr = genRespWithYear(income, year)
         qtr["Quarter"] = income["period"]
         return qtr
 
     def quarter(self, year, qtr):
-        if qtr in self.incomes[year]:
-            return self.incomes[year][qtr]
+        if year in self.incomes:
+            if qtr in self.incomes[year]:
+                return self.incomes[year][qtr]
 
         return {}
 
@@ -77,12 +74,12 @@ class Quarterly:
         for year in self.incomes:
             qtrs = self.incomes.get(year)
             for qtr in qtrs:
-                total = total + qtrs[qtr]["EPS"]
-                addedQtrs+=1
+                for q in qtr:
+                    total = total + qtr[q]["EPS"]
+                    addedQtrs+=1
 
-                if addedQtrs == 4:
-                    return total
-
+                    if addedQtrs == 4:
+                        return total
 class Income:
 
     yearly = Yearly()
@@ -113,3 +110,17 @@ class Income:
 
     def ttmEPS(self):
         return self.quarterly.ttmEPS()
+
+    def output(self):
+        return {
+            'Interest Expense': [formatter.generate(self, "Interest Expense"), "ratio"],
+            'Total Revenue': [formatter.generate(self, "Total Revenue"), "money"],
+            'EBITDA': [formatter.generate(self, "EBITDA"), "money"], 
+            'Net Income': [formatter.generate(self, "Net Income"), "money"],
+            'Net Income Ratio': [formatter.generate(self, "Net Income Ratio"), "ratio"],
+            'Gross Profit': [formatter.generate(self, "Gross Profit"), "money"],
+            'Gross Profit Ratio': [formatter.generate(self, "Gross Profit Ratio"), "ratio"],
+            'Operating Income': [formatter.generate(self, "Operating Income"), "money"],
+            'Operating Income Ratio': [formatter.generate(self, "Operating Income Ratio"), "ratio"],
+            'EPS': [formatter.generate(self, "EPS"), "money"],
+        }

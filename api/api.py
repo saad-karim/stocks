@@ -1,7 +1,9 @@
 import api.iex.prod
-import api.iex.translator
-import api.fmp.translator
 import api.fmp.prod
+from enum import Enum
+
+Annual = "annual"
+Quarter = "quarter"
 
 class Prod:
 

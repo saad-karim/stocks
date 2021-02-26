@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 xlsxwriter = "*"
+numpy = "*"
 
 [dev-packages]
 

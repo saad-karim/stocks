@@ -10,7 +10,6 @@ import sys
 import xlsxwriter
 import argparse
 from stock import Stock
-from formatter.formatter import Formatter
 from writer import Writer
 
 logging.basicConfig(level="INFO")
@@ -72,12 +71,8 @@ if envir == "sandbox":
 # - Entering new/creating markets
 
 stock = Stock(symb, stockapi, 10)
-stock.pullData()
-
-formatter = Formatter()
-rtd = formatter.realtimeData(stock)
-hd = formatter.historicData(stock)
+stock.pullData(timeout=.5)
 
 # Write gathered data to a properly formatted xls type file
-writer = Writer(symb)
-writer.writef(formatter, stock)
+writer = Writer(stock)
+writer.writef()

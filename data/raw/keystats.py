@@ -1,3 +1,4 @@
+# Does not contain any historical data
 class KeyStats:
 
     resp = {}

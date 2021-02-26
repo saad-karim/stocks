@@ -1,4 +1,5 @@
-import datetime
+import loader.date as loader
+import data.raw.historical.format as formatter
 
 def genRespWithYear(raw, year):
     return {
@@ -11,13 +12,9 @@ def genRespWithYear(raw, year):
         "Working Capital": raw["workingCapital"],
     }
 
-def getDate(dateStr):
-    date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
-    return date.year
-
 class Yearly:
 
-    metrics = {}
+    __metrics = {}
 
     def __init__(self):
         return
@@ -25,20 +22,19 @@ class Yearly:
     def load(self, metrics):
         for metric in metrics:
             resp = self.data(metric)
-            self.metrics[resp["Year"]] = resp
+            self.__metrics[resp["Year"]] = resp
 
     def data(self, metric):
         recordDate = metric["date"]
-        year = getDate(recordDate)
+        year = loader.getDate(recordDate)
         return genRespWithYear(metric, year)
 
     def year(self, year):
-        return self.metrics[year]
+        return self.__metrics[year]
 
 class Quarterly:
 
-    currentYear = datetime.datetime.now().year
-    metrics = {}
+    __metrics = {}
     numOfQtrs = 0
 
     def __init__(self):
@@ -48,22 +44,22 @@ class Quarterly:
         for metric in metrics:
             resp = self.data(metric)
             if resp != None:
-                self.metrics[resp["Year"]] = {
+                self.__metrics[resp["Year"]] = {
                     resp["Quarter"]: resp,
                 }
 
     def data(self, metric):
         recordDate = metric["date"]
-        year = getDate(recordDate)
-        # if year == self.currentYear:
+        year = loader.getDate(recordDate)
         qtr = genRespWithYear(metric, year)
         qtr["Quarter"] = "Q"+str(self.numOfQtrs)
         self.numOfQtrs+=1
         return qtr
 
     def quarter(self, year, qtr):
-        if qtr in self.metrics[year]:
-            return self.metrics[year][qtr]
+        if year in self.__metrics:
+            if qtr in self.__metrics[year]:
+                return self.__metrics[year][qtr]
 
         return {}
 
@@ -88,3 +84,11 @@ class KeyMetrics:
 
     def year(self, year):
         return self.yearly.year(year)
+    
+    def output(self):
+        return {
+            'Market Cap': [formatter.generate(self, "Market Cap"), "money"],
+            'Shareholders Equity Per Share': [formatter.generate(self, "Shareholders Equity Per Share"), "money"],
+            'Book Value Per Share': [formatter.generate(self, "Book Value Per Share"), "money"],
+            'Tangible Book Value Per Share': [formatter.generate(self, "Tangible Book Value Per Share"), "money"],
+        }

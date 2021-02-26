@@ -81,7 +81,7 @@ class Writer:
         currentYear = datetime.datetime.now().year
         currentYearStr = str(currentYear)
 
-        qtrs = [currentYearStr+"-Q2", currentYearStr+"-Q1"]
+        qtrs = [currentYearStr+"-Q4", currentYearStr+"-Q3", currentYearStr+"-Q2", currentYearStr+"-Q1"]
         for col_num, qtr in enumerate(qtrs):
             worksheet.write(row-1, col_num+1, qtr, self.h2)
 
@@ -90,29 +90,29 @@ class Writer:
 
         row += 2
         worksheet.write("A{0}".format(row), 'General', self.h3)
-        row = self.writeData(worksheet, row, stock.enterpriseValues.output())
-        row = self.writeData(worksheet, row, stock.keyMetrics.output())
-        row = self.writeData(worksheet, row, stock.dividend.output())
+        row = self.writeData(worksheet, row, stock.rawData.enterpriseValues.output())
+        row = self.writeData(worksheet, row, stock.rawData.keyMetrics.output())
+        row = self.writeData(worksheet, row, stock.rawData.dividend.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Income', self.h3)
-        row = self.writeData(worksheet, row, stock.income.output())
+        row = self.writeData(worksheet, row, stock.rawData.income.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Balance Sheet', self.h3)
-        row = self.writeData(worksheet, row, stock.balanceSheet.output())
+        row = self.writeData(worksheet, row, stock.rawData.balanceSheet.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Cash Flow', self.h3)
-        row = self.writeData(worksheet, row, stock.cashFlow.output())
+        row = self.writeData(worksheet, row, stock.rawData.cashFlow.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Ratios', self.h3)
-        row = self.writeData(worksheet, row, stock.ratios.output())
+        row = self.writeData(worksheet, row, stock.rawData.ratios.output())
 
         row += 2
         worksheet.write("A{0}".format(row), 'Growth', self.h3)
-        row = self.writeData(worksheet, row, stock.financialGrowth.output())
+        row = self.writeData(worksheet, row, stock.rawData.financialGrowth.output())
 
         self.workbook.close()
 

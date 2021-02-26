@@ -1,4 +1,5 @@
 import loader.date as loader
+import data.raw.historical.format as formatter
 
 def genRespWithYear(balanceSheet, year):
     return {
@@ -56,8 +57,9 @@ class Quarterly:
         return qtr
 
     def quarter(self, year, qtr):
-        if qtr in self.__sheets[year]:
-            return self.__sheets[year][qtr]
+        if year in self.__sheets:
+            if qtr in self.__sheets[year]:
+                return self.__sheets[year][qtr]
 
         return {}
 
@@ -88,36 +90,8 @@ class BalanceSheet:
 
     def output(self):
         return {
-            'Cash': [[
-                self.quarter(2020, "Q2").get("Cash"),
-                self.quarter(2020, "Q1").get("Cash"),
-                self.year(2019).get("Cash"),
-                self.year(2018).get("Cash"),
-                self.year(2017).get("Cash"),
-                self.year(2016).get("Cash"),
-            ], "money"],
-            'Current Assets': [[
-                self.quarter(2020, "Q2").get("Current Assets"),
-                self.quarter(2020, "Q1").get("Current Assets"),
-                self.year(2019).get("Current Assets"),
-                self.year(2018).get("Current Assets"),
-                self.year(2017).get("Current Assets"),
-                self.year(2016).get("Current Assets"),
-            ], "money"],
-            'Current Liabilities': [[
-                self.quarter(2020, "Q2").get("Current Liabilities"),
-                self.quarter(2020, "Q1").get("Current Liabilities"),
-                self.year(2019).get("Current Liabilities"),
-                self.year(2018).get("Current Liabilities"),
-                self.year(2017).get("Current Liabilities"),
-                self.year(2016).get("Current Liabilities"),
-            ], "money"],
-            'Shareholder Equity': [[
-                self.quarter(2020, "Q2").get("Shareholder Equity"),
-                self.quarter(2020, "Q1").get("Shareholder Equity"),
-                self.year(2019).get("Shareholder Equity"),
-                self.year(2018).get("Shareholder Equity"),
-                self.year(2017).get("Shareholder Equity"),
-                self.year(2016).get("Shareholder Equity"),
-            ], "money"],
+            'Cash': [formatter.generate(self, "Cash"), "money"],
+            'Current Assets': [formatter.generate(self, "Current Assets"), "money"],
+            'Current Liabilities': [formatter.generate(self, "Current Liabilities"), "money"],
+            'Shareholder Equity': [formatter.generate(self, "Shareholder Equity"), "money"],
         }

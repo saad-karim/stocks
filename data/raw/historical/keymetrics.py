@@ -1,4 +1,5 @@
 import loader.date as loader
+import data.raw.historical.format as formatter
 
 def genRespWithYear(raw, year):
     return {
@@ -56,8 +57,9 @@ class Quarterly:
         return qtr
 
     def quarter(self, year, qtr):
-        if qtr in self.__metrics[year]:
-            return self.__metrics[year][qtr]
+        if year in self.__metrics:
+            if qtr in self.__metrics[year]:
+                return self.__metrics[year][qtr]
 
         return {}
 
@@ -85,36 +87,8 @@ class KeyMetrics:
     
     def output(self):
         return {
-            'Market Cap': [[
-                self.quarter(2020, "Q2").get("Market Cap"),
-                self.quarter(2020, "Q1").get("Market Cap"),
-                self.year(2019).get("Market Cap"),
-                self.year(2018).get("Market Cap"),
-                self.year(2017).get("Market Cap"),
-                self.year(2016).get("Market Cap"),
-            ], "money"],
-            'Shareholders Equity Per Share': [[
-                self.quarter(2020, "Q2").get("Shareholders Equity Per Share"),
-                self.quarter(2020, "Q1").get("Shareholders Equity Per Share"),
-                self.year(2019).get("Shareholders Equity Per Share"),
-                self.year(2018).get("Shareholders Equity Per Share"),
-                self.year(2017).get("Shareholders Equity Per Share"),
-                self.year(2016).get("Shareholders Equity Per Share"),
-            ], "money"],
-            'Book Value Per Share': [[
-                self.quarter(2020, "Q2").get("Book Value Per Share"),
-                self.quarter(2020, "Q1").get("Book Value Per Share"),
-                self.year(2019).get("Book Value Per Share"),
-                self.year(2018).get("Book Value Per Share"),
-                self.year(2017).get("Book Value Per Share"),
-                self.year(2016).get("Book Value Per Share"),
-            ], "money"],
-            'Tangible Book Value Per Share': [[
-                self.quarter(2020, "Q2").get("Tangible Book Value Per Share"),
-                self.quarter(2020, "Q1").get("Tangible Book Value Per Share"),
-                self.year(2019).get("Tangible Book Value Per Share"),
-                self.year(2018).get("Tangible Book Value Per Share"),
-                self.year(2017).get("Tangible Book Value Per Share"),
-                self.year(2016).get("Tangible Book Value Per Share"),
-            ], "money"],
+            'Market Cap': [formatter.generate(self, "Market Cap"), "money"],
+            'Shareholders Equity Per Share': [formatter.generate(self, "Shareholders Equity Per Share"), "money"],
+            'Book Value Per Share': [formatter.generate(self, "Book Value Per Share"), "money"],
+            'Tangible Book Value Per Share': [formatter.generate(self, "Tangible Book Value Per Share"), "money"],
         }

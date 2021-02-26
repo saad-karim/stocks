@@ -1,5 +1,8 @@
 import datetime
 
+def currentYear():
+    return datetime.datetime.now().year
+
 def getDate(dateStr):
     date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
     return date.year

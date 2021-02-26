@@ -1,4 +1,5 @@
 import loader.date as loader
+import data.raw.historical.format as formatter
 
 def genRespWithYear(raw, year):
     return {
@@ -55,9 +56,9 @@ class Quarterly:
         return qtr
 
     def quarter(self, year, qtr):
-        # print(self.values)
-        if qtr in self.__values[year]:
-            return self.__values[year][qtr]
+        if year in self.__values:
+            if qtr in self.__values[year]:
+                return self.__values[year][qtr]
 
         return {}
 
@@ -88,20 +89,6 @@ class EnterpriseValues:
 
     def output(self):
         return {
-            'Price': [[
-                self.quarter(2020, "Q2").get("Stock Price"),
-                self.quarter(2020, "Q1").get("Stock Price"),
-                self.year(2019).get("Stock Price"),
-                self.year(2018).get("Stock Price"),
-                self.year(2017).get("Stock Price"),
-                self.year(2016).get("Stock Price"),
-            ], "num"],
-            'Number of Shares': [[
-                self.quarter(2020, "Q2").get("Number of Shares"),
-                self.quarter(2020, "Q1").get("Number of Shares"),
-                self.year(2019).get("Number of Shares"),
-                self.year(2018).get("Number of Shares"),
-                self.year(2017).get("Number of Shares"),
-                self.year(2016).get("Number of Shares"),
-            ], "num"],
+            'Price': [formatter.generate(self, "Stock Price"), "num"],
+            'Number of Shares': [formatter.generate(self, "Number of Shares"), "num"],
         }

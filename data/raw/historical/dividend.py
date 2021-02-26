@@ -1,5 +1,7 @@
 import datetime
+import loader.date as loader
 from decimal import Decimal
+import data.raw.historical.format as formatter
 
 def genRespWithYear(year, date, div):
     return {
@@ -119,8 +121,9 @@ class Quarterly:
             i+=1
 
     def quarter(self, year, qtr):
-        if qtr in self.__savedDivs[year]:
-            return self.__savedDivs[year][qtr]
+        if year in self.__savedDivs:
+            if qtr in self.__savedDivs[year]:
+                return self.__savedDivs[year][qtr]
 
         return {}
 
@@ -162,13 +165,7 @@ class Dividend:
         return self.quarterlyIncome.ttm()
 
     def output(self):
+        currentYear = loader.currentYear()
         return {
-            'Dividend': [[
-                self.quarter(2020, "Q2").get("Amount"),
-                self.quarter(2020, "Q1").get("Amount"),
-                self.year(2019).get("Amount"),
-                self.year(2018).get("Amount"),
-                self.year(2017).get("Amount"),
-                self.year(2016).get("Amount"),
-            ], "money"],
+            'Dividend': [formatter.generate(self, "Amount"), "money"],
         }

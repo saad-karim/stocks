@@ -7,21 +7,44 @@ from data.metrics.returnonequity import ReturnOnEquity
 from data.metrics.intrinsicvalue import IntrinsicValue
 from data.metrics.freecashflowratio import FreeCashFlowRatio
 from data.metrics.income.interestcoverage import InterestCoverage
+from data.metrics.growth.price import Price as PriceGrowth
 
 class Metrics:
 
-    def __init__(self, keyStats, income, cashflow):
-         self.keyStats = keyStats
-         self.income = income
-         self.cashflow = cashflow
+    def __init__(self, rawData):
+        self.rawData = rawData
+        self.priceGrowth = PriceGrowth()
 
     def intrinsicValue(self, baseCashFlow, longGrowthRate, growthRate, discountRate, n):
-        return IntrinsicValue().calc(baseCashFlow, longGrowthRate, growthRate, discountRate, self.keyStats, n)
+        return IntrinsicValue().calc(baseCashFlow, longGrowthRate, growthRate, discountRate, self.rawData.keyStats.output(), n)
 
     def freeCashFlowRatio(self):
         fcfr = FreeCashFlowRatio()
-        fcfr.calc(self.income, self.cashflow)
+        fcfr.calc(self.rawData.income, self.rawData.cashflow)
         return fcfr
+
+    def calcPriceGrowth(self):
+        return self.priceGrowth.calc(self.rawData.enterpriseValues)
+
+    def ttmDividend(self):
+        rawData = self.rawData
+
+        ttmDiv = rawData.dividend.ttm()
+        price = rawData.price.output()["Price"]
+        wc = rawData.keyMetrics.year(2018)["Working Capital"]
+        shares = rawData.keyStats.output()["Shares Outstanding"]
+
+        return {
+            "TTM Dividend Yield": ttmDiv / price,
+            "TTM Dividend": ttmDiv,
+            "Price to Working Capital": price / (wc / shares),
+        }
+    
+    def ttmEPS(self):
+        ttmEPS = self.rawData.income.ttmEPS()
+        return{
+            "TTM EPS": ttmEPS,
+        }
 
     # def __init__(self, price, advKeyStats, keyStats, income, balanceSheet):
     #     self.price = price

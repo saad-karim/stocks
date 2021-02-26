@@ -27,6 +27,4 @@ class IntrinsicValue:
         iv = round(((self.discountedFreeCashFlow(baseCashFlow, growthRate, discountRate, n)
                         + self.discountedPerpetuityCashFlow(baseCashFlow, longGrowthRate, growthRate, discountRate))
                         / keyStats["Shares Outstanding"]), 2)
-        return {
-            "Intrinsic Value": iv,
-        }
+        return iv

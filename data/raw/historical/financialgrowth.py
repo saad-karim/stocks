@@ -91,7 +91,7 @@ class FinancialGrowth:
     
     def output(self):
         return {
-            'EPS Growth': [formatter.generate(self, "EPS Growth"), "money"],
+            'EPS Growth': [formatter.generate(self, "EPS Growth"), "num"],
             'Price Growth': [formatter.generate(self, "Price Growth"), "pct"],
         }
 

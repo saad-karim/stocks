@@ -50,7 +50,6 @@ class Quarterly:
         for income in incomes:
             resp = self.data(income)
             if resp != None:
-                print("resp: ", resp)
                 self.incomes[resp["Year"]].append({
                     resp["Quarter"]: resp,
                 })
@@ -118,10 +117,10 @@ class Income:
             'Total Revenue': [formatter.generate(self, "Total Revenue"), "money"],
             'EBITDA': [formatter.generate(self, "EBITDA"), "money"], 
             'Net Income': [formatter.generate(self, "Net Income"), "money"],
-            'Net Income Ratio': [formatter.generate(self, "Net Income Ration"), "ratio"],
+            'Net Income Ratio': [formatter.generate(self, "Net Income Ratio"), "ratio"],
             'Gross Profit': [formatter.generate(self, "Gross Profit"), "money"],
-            'Gross Profit Ratio': [formatter.generate(self, "Gross Profit Ration"), "ratio"],
-            'Operating Income': [formatter.generate(self, "Operation Income"), "money"],
+            'Gross Profit Ratio': [formatter.generate(self, "Gross Profit Ratio"), "ratio"],
+            'Operating Income': [formatter.generate(self, "Operating Income"), "money"],
             'Operating Income Ratio': [formatter.generate(self, "Operating Income Ratio"), "ratio"],
             'EPS': [formatter.generate(self, "EPS"), "money"],
         }

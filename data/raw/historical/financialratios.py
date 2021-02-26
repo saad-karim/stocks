@@ -99,10 +99,10 @@ class FinancialRatios:
             'Net Profit Margin': [formatter.generate(self, "Net Profit Margin"), "pct"],
             'Return on Assets': [formatter.generate(self, "Return on Assets"), "pct"],
             'Return on Equity': [formatter.generate(self, "Return on Equity"), "pct"],
-            'Debt Equity Ratio': [formatter.generate(self, "Debt Equity Ration"), "ratio"],
+            'Debt Equity Ratio': [formatter.generate(self, "Debt Equity Ratio"), "ratio"],
             'Interest Coverage': [formatter.generate(self, "Interest Coverage"), "ratio"],
-            'Price To Book Ratio': [formatter.generate(self, "Price To Book Ration"), "ratio"],
-            'Current Ratio': [formatter.generate(self, "Current Ration"), "ratio"], 
+            'Price To Book Ratio': [formatter.generate(self, "Price To Book Ratio"), "ratio"],
+            'Current Ratio': [formatter.generate(self, "Current Ratio"), "ratio"], 
             # 'Free Cash Flow Ratio': [[
             #     stock.metrics.freeCashFlowRatio().quarter(currentYear, "Q2"),
             #     stock.metrics.freeCashFlowRatio().quarter(currentYear, "Q1"),

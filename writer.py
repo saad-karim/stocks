@@ -45,9 +45,12 @@ class Writer:
                 fmt = values[1]
                 values = values[0]
 
-            for value in values:
-                worksheet.write(row, col, value, self.entryType(fmt))
-                col += 1
+            if isinstance(values, list):
+                for value in values:
+                    worksheet.write(row, col, value, self.entryType(fmt))
+                    col += 1
+            else:
+                worksheet.write(row, col, values, self.entryType(fmt))
 
             row += 1
         return row
@@ -113,6 +116,10 @@ class Writer:
         row += 2
         worksheet.write("A{0}".format(row), 'Growth', self.h3)
         row = self.writeData(worksheet, row, stock.rawData.financialGrowth.output())
+
+        row += 2
+        worksheet.write("A{0}".format(row), 'Metrics', self.h3)
+        row = self.writeData(worksheet, row, stock.realtimeMetrics())
 
         self.workbook.close()
 

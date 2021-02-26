@@ -8,6 +8,10 @@ from data.metrics.intrinsicvalue import IntrinsicValue
 from data.metrics.freecashflowratio import FreeCashFlowRatio
 from data.metrics.income.interestcoverage import InterestCoverage
 from data.metrics.growth.price import Price as PriceGrowth
+import numpy as np
+
+def remove_values_from_list(the_list, val):
+    return [value for value in the_list if value != val]
 
 class Metrics:
 
@@ -45,6 +49,25 @@ class Metrics:
         return{
             "TTM EPS": ttmEPS,
         }
+    
+    def outstandingSharesTrend(self): 
+        shares = self.rawData.enterpriseValues.getAllValues("Number of Shares")
+        shares = remove_values_from_list(shares, 0.0)
+        shares = remove_values_from_list(shares, None)
+        # list(filter((0.0).__ne__, shares))
+        # list(filter((None).__ne__, shares))
+        shares.reverse()
+        # print("shares: ", shares)
+        x = np.arange(0, len(shares))
+        y = np.array(shares)
+        z = np.polyfit(x, y, 1)
+        # print("z:", z)
+        # print("{0}x + {1}".format(*z))
+        if z[0] < 0:
+            return -1
+
+        return 0
+
 
     # def __init__(self, price, advKeyStats, keyStats, income, balanceSheet):
     #     self.price = price

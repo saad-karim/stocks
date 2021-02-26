@@ -62,6 +62,9 @@ class Quarterly:
 
         return {}
 
+    def allQuarters(self):
+        return self.__values
+
 class EnterpriseValues:
 
     yearly = Yearly()
@@ -86,6 +89,19 @@ class EnterpriseValues:
     
     def allYears(self):
         return self.yearly.allYears()
+
+    def allQuarters(self):
+        return self.quarterly.allQuarters()
+    
+    def getAllValues(self, key):
+        values = []
+        for qtr in self.allQuarters().values():
+            values.append(qtr.get(key))
+
+        for year in self.allYears().values():
+            values.append(year.get(key))
+        
+        return values
 
     def output(self):
         return {

@@ -1,7 +1,6 @@
 import datetime
 import loader.date as loader
 from decimal import Decimal
-import data.raw.historical.format as formatter
 
 def genRespWithYear(year, date, div):
     return {
@@ -15,18 +14,18 @@ def getYear(dateStr):
 
 def getQuarter(dateStr):
     qtrs = {
-        1: "Q1",
-        2: "Q1",
-        3: "Q1",
-        4: "Q2",
-        5: "Q2",
-        6: "Q2",
-        7: "Q3",
-        8: "Q3",
-        9: "Q3",
-        10: "Q4",
-        11: "Q4",
-        12: "Q4",
+        1: 1,
+        2: 1,
+        3: 1,
+        4: 2,
+        5: 2,
+        6: 2,
+        7: 3,
+        8: 3,
+        9: 3,
+        10: 4,
+        11: 4,
+        12: 4,
     }
 
     date = datetime.datetime.strptime(dateStr, "%Y-%m-%d")
@@ -41,23 +40,22 @@ class Yearly:
         return
 
     def load(self, dividends):
-        h = dividends["historical"]
         i = 0
-        while i < len(h):
-            div = h[i]
+        while i < len(dividends):
+            div = dividends[i]
             year = getYear(div["date"])
 
             pos = i+1
-            divAmount = Decimal(div["adjDividend"])
+            divAmount = Decimal(div["amount"])
             # Peek forward one element at a time until different year found
-            for nextDiv in h[pos:]:
+            for nextDiv in dividends[pos:]:
                 nextDivYear = getYear(nextDiv["date"])
 
-                if pos == len(h)-1:
-                    if year == nextDivYear:
-                        divAmount = divAmount + Decimal(nextDiv["adjDividend"])
-                    else:
-                        divAmount = Decimal(nextDiv["adjDividend"])
+                if pos == len(dividends)-1: # If at the last dividend value
+                    if year == nextDivYear: # If next dividend is from the same year, sum the values
+                        divAmount = divAmount + Decimal(nextDiv["amount"])
+                    else: # If next dividend is from different year, start fresh
+                        divAmount = Decimal(nextDiv["amount"])
 
                     self.__savedDivs.update({
                         nextDivYear: {
@@ -66,7 +64,7 @@ class Yearly:
                     })
 
                 if year == nextDivYear:
-                    divAmount = divAmount + Decimal(nextDiv["adjDividend"])
+                    divAmount = divAmount + Decimal(nextDiv["amount"])
                     pos+= 1
                 else:
                     self.__savedDivs.update({
@@ -79,14 +77,15 @@ class Yearly:
             i = pos-1
             i+= 1
 
-
     def data(self, income):
         date = income["date"]
         year = getYear(date)
         return genRespWithYear(income, year)
 
     def year(self, year):
-        return self.__savedDivs[year]
+        if year in self.__savedDivs:
+            return self.__savedDivs[year]
+        return "n/a"
 
 class Quarterly:
 
@@ -96,10 +95,9 @@ class Quarterly:
         return
 
     def load(self, dividends):
-        h = dividends["historical"]
         i = 0
-        while i < len(h):
-            div = h[i]
+        while i < len(dividends):
+            div = dividends[i]
             year = getYear(div["date"])
             qtr = getQuarter(div["date"])
 
@@ -108,18 +106,18 @@ class Quarterly:
                 self.__savedDivs.update({
                     year: {
                         qtr: {
-                            "Amount": div["adjDividend"],
+                            "Amount": div["amount"],
                         }
                     }
                 })
             else:
                 self.__savedDivs[year].update( {
                         qtr: {
-                            "Amount": div["adjDividend"],
+                            "Amount": div["amount"],
                         }
                 })
             i+=1
-
+        
     def quarter(self, year, qtr):
         if year in self.__savedDivs:
             if qtr in self.__savedDivs[year]:
@@ -141,31 +139,14 @@ class Quarterly:
 
 class Dividend:
 
-    yearlyIncome = Yearly()
-    quarterlyIncome = Quarterly()
+    _yearly = Yearly()
+    _quarterly = Quarterly()
 
     def __init__(self):
         return
 
-    def loadYearlyData(self, incomes):
-        self.yearlyIncome.load(incomes)
-        return self
+    def yearly(self):
+        return self._yearly
 
-    def loadQuarterlyData(self, incomes):
-        self.quarterlyIncome.load(incomes)
-        return self
-
-    def quarter(self, year, qtr):
-        return self.quarterlyIncome.quarter(year, qtr)
-
-    def year(self, year):
-        return self.yearlyIncome.year(year)
-
-    def ttm(self):
-        return self.quarterlyIncome.ttm()
-
-    def output(self):
-        currentYear = loader.currentYear()
-        return {
-            'Dividend': [formatter.generate(self, "Amount"), "money"],
-        }
+    def quarterly(self):
+        return self._quarterly

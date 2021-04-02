@@ -4,3 +4,4 @@ test.csv
 *.xls
 cache/
 output/
+.vscode

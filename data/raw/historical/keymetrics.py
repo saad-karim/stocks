@@ -30,7 +30,7 @@ class Yearly:
         return genRespWithYear(metric, year)
 
     def year(self, year):
-        return self.__metrics[year]
+        return self.__metrics.get(year)
 
 class Quarterly:
 

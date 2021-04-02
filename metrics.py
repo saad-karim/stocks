@@ -20,7 +20,7 @@ class Metrics:
         self.priceGrowth = PriceGrowth()
 
     def intrinsicValue(self, baseCashFlow, longGrowthRate, growthRate, discountRate, n):
-        return IntrinsicValue().calc(baseCashFlow, longGrowthRate, growthRate, discountRate, self.rawData.keyStats.output(), n)
+        return IntrinsicValue().calc(baseCashFlow, longGrowthRate, growthRate, discountRate, self.rawData.keyStats.get(), n)
 
     def freeCashFlowRatio(self):
         fcfr = FreeCashFlowRatio()
@@ -31,18 +31,35 @@ class Metrics:
         return self.priceGrowth.calc(self.rawData.enterpriseValues)
 
     def ttmDividend(self):
+        ttm =  {
+            "TTM Dividend Yield": 0,
+            "TTM Dividend": 0,
+            "Price to Working Capital": 0,
+        }
+        
         rawData = self.rawData
-
         ttmDiv = rawData.dividend.ttm()
         price = rawData.price.output()["Price"]
-        wc = rawData.keyMetrics.year(2018)["Working Capital"]
-        shares = rawData.keyStats.output()["Shares Outstanding"]
 
-        return {
-            "TTM Dividend Yield": ttmDiv / price,
-            "TTM Dividend": ttmDiv,
-            "Price to Working Capital": price / (wc / shares),
-        }
+        if ttmDiv != None:
+            ttm["TTM Dividend Yield"] = ttmDiv / price
+            ttm["TTM Dividend"] = ttmDiv
+            
+        keyMetrics = rawData.keyMetrics.year(2018)
+
+        wc = 0
+        if keyMetrics != None:
+            shares = rawData.keyStats.get()["Shares Outstanding"]
+            wc = keyMetrics.get("Working Capital")
+            ttm["Price to Working Capital"] = price / (wc / shares)
+
+        return ttm
+        # return {
+        #     "TTM Dividend Yield": ttmDiv / price,
+        #     "TTM Dividend": ttmDiv,
+        #     # "Price to Working Capital": price / (wc / shares),
+        #     "Price to Working Capital": 1,
+        # }
     
     def ttmEPS(self):
         ttmEPS = self.rawData.income.ttmEPS()

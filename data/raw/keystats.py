@@ -22,5 +22,5 @@ class KeyStats:
             "TTM Dividend Rate": keystats["ttmDividendRate"],
         }
 
-    def output(self):
+    def get(self):
         return self.resp

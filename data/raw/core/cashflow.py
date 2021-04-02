@@ -1,10 +1,10 @@
 import loader.date as loader
-import data.raw.historical.format as formatter
 
 def genRespWithYear(raw, year):
     return {
         "Year": year,
-        "Free Cash Flow": raw["freeCashFlow"],
+        # "Free Cash Flow": raw["freeCashFlow"],
+        "Cash Flow": raw["cashFlow"],
         "Operating Cash Flow": raw.get("operatingCashFlow"),
         "Investing Cash Flow": raw.get("investingCashFlow"),
         "Financing Cash Flow": raw.get("financingCashFlow"),
@@ -31,7 +31,10 @@ class Yearly:
         return genRespWithYear(cashflow, year)
 
     def year(self, year):
-        return self.__cashflows[year]
+        if year in self.__cashflows:
+            return self.__cashflows[year]
+        
+        return {}
 
     def allYears(self):
         return self.__cashflows
@@ -56,7 +59,7 @@ class Quarterly:
         recordDate = cashflow["date"]
         year = loader.getDate(recordDate)
         qtr = genRespWithYear(cashflow, year)
-        qtr["Quarter"] = cashflow["period"]
+        qtr["Quarter"] = cashflow["quarter"]
         return qtr
 
     def quarter(self, year, qtr):
@@ -71,39 +74,14 @@ class Quarterly:
 
 class CashFlow:
 
-    yearly = Yearly()
-    quarterly = Quarterly()
+    _yearly = Yearly()
+    _quarterly = Quarterly()
 
     def __init__(self):
         return
 
-    def loadYearlyData(self, cashflows):
-        self.yearly.load(cashflows)
-        return self
+    def yearly(self):
+        return self._yearly
 
-    def loadQuarterlyData(self, cashflows):
-        self.quarterly.load(cashflows)
-        return self
-
-    def allQtrs(self):
-        return self.quarterly.allQtrs()
-
-    def quarter(self, year, qtr):
-        return self.quarterly.quarter(year, qtr)
-
-    def allYears(self):
-        return self.yearly.allYears()
-
-    def year(self, year):
-        return self.yearly.year(year)
-        
-    def output(self):
-        return {
-            'Free Cash Flow': [formatter.generate(self, "Free Cash Flow"), "money"],
-            'Acquisitions': [formatter.generate(self, "Acquisitions"), "money"],
-            'Stock BuyBack': [formatter.generate(self, "Stock Buyback"), "money"],
-            'Net Change in Cash': [formatter.generate(self, "Net Change in Cash"), "money"],
-            'Operating Cash Flow': [formatter.generate(self, "Operating Cash Flow"), "money"],
-            'Investing Cash Flow': [formatter.generate(self, "Investing Cash Flow"), "money"],
-            'Financing Cash Flow': [formatter.generate(self, "Financing Cash Flow"), "money"],
-        }
+    def quarterly(self):
+        return self._quarterly

@@ -9,8 +9,10 @@ import os
 import sys
 import xlsxwriter
 import argparse
+from translator.iex import Translator
 from stock import Stock
 from writer import Writer
+from rawdatafetcher import RawDataFetcher
 
 logging.basicConfig(level="INFO")
 log = logging.getLogger("main")
@@ -25,7 +27,7 @@ parser.add_argument('--envir', default='prod')
 parser.add_argument('--stock')
 args = parser.parse_args()
 
-symb = args.stock
+symb = args.stock.upper()
 envir = args.envir
 
 refresh = args.refresh
@@ -70,8 +72,9 @@ if envir == "sandbox":
 # - Invesment in innovation/research
 # - Entering new/creating markets
 
-stock = Stock(symb, stockapi, 10)
-stock.pullData(timeout=.5)
+dataFetcher = RawDataFetcher(stockapi, Translator())
+stock = Stock(symb, 10, dataFetcher)
+stock.loadData()
 
 # Write gathered data to a properly formatted xls type file
 writer = Writer(stock)

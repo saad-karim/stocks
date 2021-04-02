@@ -1,5 +1,4 @@
 import loader.date as loader
-import data.raw.historical.format as formatter
 
 def genRespWithYear(balanceSheet, year):
     return {
@@ -28,7 +27,10 @@ class Yearly:
         return genRespWithYear(sheet, year)
 
     def year(self, year):
-        return self.__sheets[year]
+        if year in self.__sheets:
+            return self.__sheets[year]
+
+        return {}
 
     def allYears(self):
         return self.__sheets
@@ -53,7 +55,7 @@ class Quarterly:
         recordDate = sheet["date"]
         year = loader.getDate(recordDate)
         qtr = genRespWithYear(sheet, year)
-        qtr["Quarter"] = sheet["period"]
+        qtr["Quarter"] = sheet["quarter"]
         return qtr
 
     def quarter(self, year, qtr):
@@ -68,30 +70,14 @@ class Quarterly:
 
 class BalanceSheet:
 
-    yearly = Yearly()
-    quarterly = Quarterly()
+    _yearly = Yearly()
+    _quarterly = Quarterly()
 
     def __init__(self):
         return
 
-    def loadYearlyData(self, balanceSheet):
-        self.yearly.load(balanceSheet)
-        return self
+    def yearly(self):
+        return self._yearly
 
-    def loadQuarterlyData(self, balanceSheet):
-        self.quarterly.load(balanceSheet)
-        return self
-
-    def quarter(self, year, qtr):
-        return self.quarterly.quarter(year, qtr)
-
-    def year(self, year):
-        return self.yearly.year(year)
-
-    def output(self):
-        return {
-            'Cash': [formatter.generate(self, "Cash"), "money"],
-            'Current Assets': [formatter.generate(self, "Current Assets"), "money"],
-            'Current Liabilities': [formatter.generate(self, "Current Liabilities"), "money"],
-            'Shareholder Equity': [formatter.generate(self, "Shareholder Equity"), "money"],
-        }
+    def quarterly(self):
+        return self._quarterly

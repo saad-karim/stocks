@@ -1,6 +1,7 @@
 import xlsxwriter
 import logging
 import datetime
+import formatter.format
 
 log = logging.getLogger("writer")
 
@@ -93,33 +94,33 @@ class Writer:
 
         row += 2
         worksheet.write("A{0}".format(row), 'General', self.h3)
-        row = self.writeData(worksheet, row, stock.rawData.enterpriseValues.output())
-        row = self.writeData(worksheet, row, stock.rawData.keyMetrics.output())
-        row = self.writeData(worksheet, row, stock.rawData.dividend.output())
+        # row = self.writeData(worksheet, row, stock.rawData.enterpriseValues.output())
+        # row = self.writeData(worksheet, row, stock.rawData.keyMetrics.output())
+        row = self.writeData(worksheet, row, formatter.format.dividend(stock.dividend()))
 
         row += 2
         worksheet.write("A{0}".format(row), 'Income', self.h3)
-        row = self.writeData(worksheet, row, stock.rawData.income.output())
+        row = self.writeData(worksheet, row, formatter.format.income(stock.income()))
 
         row += 2
         worksheet.write("A{0}".format(row), 'Balance Sheet', self.h3)
-        row = self.writeData(worksheet, row, stock.rawData.balanceSheet.output())
+        row = self.writeData(worksheet, row, formatter.format.balanceSheet(stock.balanceSheet()))
 
         row += 2
         worksheet.write("A{0}".format(row), 'Cash Flow', self.h3)
-        row = self.writeData(worksheet, row, stock.rawData.cashFlow.output())
+        row = self.writeData(worksheet, row, formatter.format.cashFlow(stock.cashFlow()))
 
-        row += 2
-        worksheet.write("A{0}".format(row), 'Ratios', self.h3)
-        row = self.writeData(worksheet, row, stock.rawData.ratios.output())
+        # row += 2
+        # worksheet.write("A{0}".format(row), 'Ratios', self.h3)
+        # row = self.writeData(worksheet, row, stock.rawData.ratios.output())
 
-        row += 2
-        worksheet.write("A{0}".format(row), 'Growth', self.h3)
-        row = self.writeData(worksheet, row, stock.rawData.financialGrowth.output())
+        # row += 2
+        # worksheet.write("A{0}".format(row), 'Growth', self.h3)
+        # row = self.writeData(worksheet, row, stock.rawData.financialGrowth.output())
 
-        row += 2
-        worksheet.write("A{0}".format(row), 'Metrics', self.h3)
-        row = self.writeData(worksheet, row, stock.realtimeMetrics())
+        # row += 2
+        # worksheet.write("A{0}".format(row), 'Metrics', self.h3)
+        # row = self.writeData(worksheet, row, stock.realtimeMetrics())
 
         self.workbook.close()
 

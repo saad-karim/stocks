@@ -26,7 +26,7 @@ class Yearly:
         return genRespWithYear(value, year)
 
     def year(self, year):
-        return self.__values[year]
+        return self.__values.get(year)
 
     def allYears(self):
         return self.__values

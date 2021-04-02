@@ -16,18 +16,21 @@ class Sandbox:
     session = requests.Session()
     session.headers.update(headers)
 
-    def __init__(self, token, cacheLocation):
+    def __init__(self, token, cacheLocation, refresh):
         self.token = token
         self.cacheLocation = cacheLocation
+        self.refresh = refresh
 
-    def dividend(self, symbol):
+    def dividend(self, symbol, range):
         log.info("Getting dividend information for: %s", symbol)
+        cacheName = "dividends-{}".format(range)
 
-        cachedResponse = self.readCache(symbol, "dividend")
+        cachedResponse = self.readCache(symbol, cacheName)
         if cachedResponse != None:
             return cachedResponse
 
-        url = baseURL+symbol+"/dividends/5y?token=" + self.token
+        resource = "/dividends/{range}?token={token}".format(range=range, token=self.token)
+        url = baseURL+symbol+resource
         log.info("Dividend URL: %s", url)
 
         response = self.session.get(url)
@@ -35,18 +38,41 @@ class Sandbox:
         log.info("Status Code: %s", response.status_code)
         log.debug("Response: %s", response.json())
 
-        self.writeCache(symbol, "dividend", response.json())
+        self.writeCache(symbol, cacheName, response.json())
 
         return response.json()
 
-    def income(self, symbol):
-        log.info("Getting income information for: %s", symbol)
+    def cashFlow(self, symbol, period, last):
+        log.info("Getting %s cash flow information for: %s", period, symbol)
+        cacheName = "cashflow-{}".format(period)
 
-        cachedResponse = self.readCache(symbol, "income")
+        cachedResponse = self.readCache(symbol, cacheName)
         if cachedResponse != None:
             return cachedResponse
 
-        url = baseURL+symbol+"/income?period=annual&last=5&token=" + self.token
+        resource = "/cash-flow?period={period}&last={last}&token={token}".format(period=period, last=last, token=self.token)
+        url = baseURL+symbol+resource
+        log.info("Cash-Flow URL: %s", url)
+
+        response = self.session.get(url)
+
+        log.info("Status Code: %s", response.status_code)
+        log.debug("Response: %s", response.json())
+
+        self.writeCache(symbol, cacheName, response.json())
+
+        return response.json()
+
+    def income(self, symbol, period, last):
+        log.info("Getting %s income information for: %s", period, symbol)
+        cacheName = "income-{}".format(period)
+
+        cachedResponse = self.readCache(symbol, cacheName)
+        if cachedResponse != None:
+            return cachedResponse
+
+        resource = "/income?period={period}&last={last}&token={token}".format(period=period, last=last, token=self.token)
+        url = baseURL+symbol+resource
         log.info("Income URL: %s", url)
 
         response = self.session.get(url)
@@ -54,18 +80,20 @@ class Sandbox:
         log.info("Status Code: %s", response.status_code)
         log.debug("Response: %s", response.json())
 
-        self.writeCache(symbol, "income", response.json())
+        self.writeCache(symbol, cacheName, response.json())
 
         return response.json()
 
-    def balanceSheet(self, symbol):
-        log.info("Getting balance sheet information for: %s", symbol)
+    def balanceSheet(self, symbol, period, last):
+        log.info("Getting %s balance sheet information for: %s", period, symbol)
+        cacheName = "balancesheet-{}".format(period)
 
-        cachedResponse = self.readCache(symbol, "balancesheet")
+        cachedResponse = self.readCache(symbol, cacheName)
         if cachedResponse != None:
             return cachedResponse
 
-        url = baseURL+symbol+"/balance-sheet?period=annual&last=5&token=" + self.token
+        resource = "/balance-sheet?period={period}&last={last}&token={token}".format(period=period, last=last, token=self.token)
+        url = baseURL+symbol+resource
         log.info("Balance Sheet URL: %s", url)
 
         response = self.session.get(url)
@@ -73,7 +101,7 @@ class Sandbox:
         log.info("Status Code: %s", response.status_code)
         log.debug("Response: %s", response.json())
 
-        self.writeCache(symbol, "balancesheet", response.json())
+        self.writeCache(symbol, cacheName, response.json())
 
         return response.json()
 

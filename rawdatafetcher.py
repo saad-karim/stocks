@@ -3,8 +3,9 @@ import time
 
 class RawDataFetcher:
 
-    def __init__(self, api, translator):
+    def __init__(self, api, years, translator):
         self.api = api
+        self.years = years
         self.translator = translator
 
 
@@ -14,36 +15,36 @@ class RawDataFetcher:
 
     ### Balance Sheet ###
     def yearlyBalanceSheet(self, symb):
-        resp = self.api.balanceSheet(symb, Annual, 4)
+        resp = self.api.balanceSheet(symb, Annual, self.years)
         return self.translator.balanceSheet.yearly(resp)
 
     def quarterlyBalanceSheet(self, symb):
-        resp = self.api.balanceSheet(symb, Quarter, 4)
+        resp = self.api.balanceSheet(symb, Quarter, self.years)
         return self.translator.balanceSheet.quarterly(resp)
 
     ### Income ###
     def yearlyIncome(self, symb):
-        resp = self.api.income(symb, Annual, 4)
+        resp = self.api.income(symb, Annual, self.years)
         return self.translator.income.yearly(resp)
 
     def quarterlyIncome(self, symb):
-        resp = self.api.income(symb, Quarter, 4)
+        resp = self.api.income(symb, Quarter, self.years)
         return self.translator.income.quarterly(resp)
 
     ### Cash Flow ###
     def yearlyCashFlow(self, symb):
-        resp = self.api.cashFlow(symb, Annual, 4)
+        resp = self.api.cashFlow(symb, Annual, self.years)
         return self.translator.cashFlow.yearly(resp)
 
     def quarterlyCashFlow(self, symb):
-        resp = self.api.cashFlow(symb, Quarter, 4)
+        resp = self.api.cashFlow(symb, Quarter, self.years)
         return self.translator.cashFlow.quarterly(resp)
 
     ### Dividend ###
     def yearlyDividend(self, symb):
-        resp = self.api.dividend(symb, "5y")
+        resp = self.api.dividend(symb, str(self.years)+"y")
         return self.translator.dividend.yearly(resp)
 
     def quarterlyDividend(self, symb):
-        resp = self.api.dividend(symb, "5y")
+        resp = self.api.dividend(symb, str(self.years)+"y")
         return self.translator.dividend.quarterly(resp)

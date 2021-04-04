@@ -14,7 +14,3 @@ class Price:
         return {
             "Price": price,
         }
-
-    def output(self):
-        return self.resp
-

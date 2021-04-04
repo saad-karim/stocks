@@ -14,6 +14,11 @@ def generate(data, key):
         data.yearly().year(currentYear-5).get(key),
     ]
 
+def price(price):
+    return {
+        'Price Used for Calculations': [[price.resp.get("Price")], "money"],
+    }
+
 def dividend(dividend):
     return {
         'Dividend Amount': [generate(dividend, "Amount"), "money"],

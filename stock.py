@@ -39,6 +39,9 @@ class Stock:
         self._dividend.yearly().load(self.dataFetcher.yearlyDividend(self.symb))
         self._dividend.quarterly().load(self.dataFetcher.quarterlyDividend(self.symb))
 
+    def price(self):
+        return self._price
+
     def income(self):
         return self._income
 
@@ -65,7 +68,13 @@ class Stock:
         return metrics
 
     def realtimeData(self):
-        return {}
+        data = {
+            'Realtime Price': '=GOOGLEFINANCE("{0}", "price")'.format(self.symb),
+            'EPS': '=GOOGLEFINANCE("{0}", "eps")'.format(self.symb),
+            'PE Ratio': '=GOOGLEFINANCE("{0}", "pe")'.format(self.symb),
+        }
+
+        return data
         # price = self.rawData.price.output()["Price"]
 
         # ttmDiv = self.metrics.ttmDividend()

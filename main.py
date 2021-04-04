@@ -72,10 +72,10 @@ if envir == "sandbox":
 # - Invesment in innovation/research
 # - Entering new/creating markets
 
-dataFetcher = RawDataFetcher(stockapi, Translator())
+dataFetcher = RawDataFetcher(stockapi, 5, Translator())
 stock = Stock(symb, 10, dataFetcher)
 stock.loadData()
 
 # Write gathered data to a properly formatted xls type file
 writer = Writer(stock)
-writer.writef()
+writer.write()

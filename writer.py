@@ -34,10 +34,12 @@ class Writer:
         if type == "num":
             return self.num
 
-    def writeBlock(self, title, worksheet, row, data):
+    def writeBlock(self, title, worksheet, row, *data):
         row += 2
         worksheet.write("A{0}".format(row), title, self.h3)
-        return self.writeData(worksheet, row, data)
+        for d in data:
+            row = self.writeData(worksheet, row, d)
+        return row
 
     def writeData(self, worksheet, row, data):
         for key, values in data.items():
@@ -76,7 +78,6 @@ class Writer:
         
         return row
         
-
     def write(self):
         stock = self.stock
 
@@ -93,13 +94,14 @@ class Writer:
 
         # Write assumption data
         row = self.writeBlock('Assumptions', worksheet, row, formatter.format.price(stock.price()))
-
+ 
         # Write core data
         row = self.coreDataHeader('Core Data', worksheet, row)
         row = self.writeBlock('General', worksheet, row, formatter.format.dividend(stock.dividend()))
         row = self.writeBlock('Income', worksheet, row, formatter.format.income(stock.income()))
         row = self.writeBlock('Balance Sheet', worksheet, row, formatter.format.balanceSheet(stock.balanceSheet()))
-        row = self.writeBlock('Cash Flow', worksheet, row, formatter.format.cashFlow(stock.cashFlow()))
+        row = self.writeBlock('Cash Flow', worksheet, row, formatter.format.cashFlow(stock.cashFlow()), formatter.format.advanced(stock.advancedFundamentals()), stock.calcFCF())
+
 
         # row += 2
         # worksheet.write("A{0}".format(row), 'Ratios', self.h3)

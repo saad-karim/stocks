@@ -3,14 +3,12 @@ import loader.date as loader
 def genRespWithYear(raw, year):
     return {
         "Year": year,
-        # "Free Cash Flow": raw["freeCashFlow"],
-        "Cash Flow": raw["cashFlow"],
+        "Free Cash Flow": raw["freeCashFlow"],
         "Operating Cash Flow": raw.get("operatingCashFlow"),
         "Investing Cash Flow": raw.get("investingCashFlow"),
         "Financing Cash Flow": raw.get("financingCashFlow"),
         "Net Change in Cash": raw.get("netChangeInCash"),
-        "Stock Buyback": raw.get("commonStockRepurchased"),
-        "Acquisitions": raw.get("acquisitionsNet"),
+        "Capital Expenditures": raw.get("capitalExpenditures"),
     }
 
 class Yearly:

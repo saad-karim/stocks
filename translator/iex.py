@@ -5,6 +5,7 @@ class Translator:
         self.balanceSheet = _BalanceSheet()
         self.cashFlow = _CashFlow()
         self.dividend = _Dividend()
+        self.advancedFundamentals = _AdvancedFundamentals()
 
 class _Income:
 
@@ -61,6 +62,8 @@ class _CashFlow:
             flow["date"] = flow.pop("fiscalDate")
             flow["investingCashFlow"] = flow.pop("totalInvestingCashFlows")
             flow["financingCashFlow"] = flow.pop("cashFlowFinancing")
+            flow["netChangeInCash"] = flow.pop("cashChange")
+            flow["freeCashFlow"] = flow.pop("cashFlow")
         return flows
         
 class _Dividend:
@@ -74,4 +77,14 @@ class _Dividend:
     def _translate(self, data):
         for d in data:
             d["date"] = d.pop("recordDate")
+        return data
+
+class _AdvancedFundamentals:
+
+    def yearly(self, data):
+        return self._translate(data)
+
+    def _translate(self, data):
+        for d in data:
+            d["date"] = d.pop("reportDate")
         return data

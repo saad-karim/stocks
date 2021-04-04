@@ -48,3 +48,8 @@ class RawDataFetcher:
     def quarterlyDividend(self, symb):
         resp = self.api.dividend(symb, str(self.years)+"y")
         return self.translator.dividend.quarterly(resp)
+
+    ### Advanced ###
+    def yearlyAdvancedFundamentls(self, symb):
+        resp = self.api.advanceFundamentals(symb, Annual, self.years)
+        return self.translator.advancedFundamentals.yearly(resp)

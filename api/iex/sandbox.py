@@ -162,6 +162,28 @@ class Sandbox:
 
         return response.json()
 
+    def advanceFundamentals(self, symbol, period, last):
+        log.info("Getting advance fundamentals  for: %s", symbol)
+        cacheName = "advancefundamentals-{}".format(period)
+
+        cachedResponse = self.readCache(symbol, cacheName)
+        if cachedResponse != None:
+            return cachedResponse
+
+        base = "https://sandbox.iexapis.com/stable"
+        resource = "/time-series/fundamentals/{symbol}/{period}?last={last}&token={token}".format(symbol=symbol, period=period, last=last, token=self.token)
+        url = base+resource
+        log.info("Price URL: %s", url)
+
+        response = self.session.get(url)
+
+        log.info("Status Code: %s", response.status_code)
+        log.debug("Response: %s", response.json())
+
+        self.writeCache(symbol, cacheName, response.json())
+
+        return response.json()
+
     def writeCache(self, symbol, api, data):
         cacheDir = os.path.join(self.cacheLocation, symbol)
         path = os.path.join(cacheDir, api + ".json")

@@ -4,6 +4,7 @@ from data.raw.core.balancesheet import BalanceSheet
 from data.raw.core.cashflow import CashFlow
 from data.raw.core.dividend import Dividend
 from data.raw.realtime.price import Price
+from data.raw.advanced.fundamentals import Fundamentals
 
 class Stock:
 
@@ -20,6 +21,9 @@ class Stock:
         self._balanceSheet = BalanceSheet()
         self._cashFlow = CashFlow()
         self._dividend = Dividend()
+
+        # Advanced
+        self._fundamentals = Fundamentals()
 
         # self.rawData = RawData(symb, api)
         # self.metrics = Metrics(self.rawData)
@@ -39,6 +43,8 @@ class Stock:
         self._dividend.yearly().load(self.dataFetcher.yearlyDividend(self.symb))
         self._dividend.quarterly().load(self.dataFetcher.quarterlyDividend(self.symb))
 
+        self._fundamentals.yearly().load(self.dataFetcher.yearlyAdvancedFundamentls(self.symb))
+
     def price(self):
         return self._price
 
@@ -53,6 +59,23 @@ class Stock:
 
     def dividend(self):
         return self._dividend
+
+    def advancedFundamentals(self):
+        return self._fundamentals
+
+    def calcFCF(self):
+        fcf = [None, None, None, None] # TODO: Get quarterly data as well
+
+        flows = self._cashFlow.yearly().allYears()
+        fundamentals = self._fundamentals.yearly().allYears()
+        for year in flows:
+            capExp = flows[year].get("Capital Expenditures")
+            operCF = fundamentals[year].get("Operating Cash Flow")
+            fcf.append(operCF + capExp)
+
+        return {
+            "Free Cash Flow": [fcf, "money"],
+        }
 
     def realtimeMetrics(self):
         fcf = self.rawData.cashFlow.year(2019)["Free Cash Flow"]

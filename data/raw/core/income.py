@@ -7,13 +7,9 @@ def genRespWithYear(income, year):
         "Quarter": income["quarter"],
         "Total Revenue": income["revenue"],
         "EBIT": income.get("ebit"),
-        # "EBITDA": income["ebitda"],
         "Net Income": income["netIncome"],
-        # "Net Income Ratio": income["netIncomeRatio"],
         "Gross Profit": income["grossProfit"],
-        # "Gross Profit Ratio": income["grossProfitRatio"],
         "Operating Income": income["operatingIncome"],
-        # "Operating Income Ratio": income["operatingIncomeRatio"],
         # "Interest Expense": income["interestExpense"],
         # "EPS": income["eps"],
     }

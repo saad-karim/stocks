@@ -77,6 +77,27 @@ class Writer:
             worksheet.write(row-1, x+len(qtrs)+1, int(currentYear) - x - 1, self.h2)
         
         return row
+
+    def analysisDataHeader(self, title, worksheet, row):
+        row += 2
+        worksheet.write("A{0}".format(row), title, self.h2)
+
+        currentYear = datetime.datetime.now().year
+        currentYearStr = str(currentYear)
+
+        qtrs = ['Q2Q', 'Q2Q', 'Q2Q', 'Q2Q']
+        # worksheet.write(row, 0, qtrs, self.h2)
+        for col_num, qtr in enumerate(qtrs):
+            worksheet.write(row-1, col_num+1, qtr, self.h2)
+
+        years = ['Y2Y', 'Y2Y', 'Y2Y', 'Y2Y']
+        # worksheet.write(row, 4, years, self.h2)
+        for col_num, year in enumerate(years):
+            worksheet.write(row-1, col_num+len(qtrs)+1, year, self.h2)
+
+        worksheet.write(row-1, 10, 'Y2Y Overall', self.h2)
+        
+        return row
         
     def write(self):
         stock = self.stock
@@ -102,6 +123,18 @@ class Writer:
         row = self.writeBlock('Balance Sheet', worksheet, row, formatter.format.balanceSheet(stock.balanceSheet()))
         row = self.writeBlock('Cash Flow', worksheet, row, formatter.format.cashFlow(stock.cashFlow()), formatter.format.advanced(stock.advancedFundamentals()), stock.calcFCF())
 
+        # Write analysis data
+        row = self.analysisDataHeader('Analysis', worksheet, row)
+        incomeTrend = stock.trends().netIncome(stock.income().yearly().getKey("Net Income"))
+        worksheet.write(row, 10, incomeTrend["overallTrend"], self.pct)
+        row = self.writeData(worksheet, row, {"Net Income Trend": [incomeTrend["yearlyTrend"], "pct"]})
+
+        currentRatio = stock.ratios().calc(stock.balanceSheet().yearly().getKey("Current Assets"), stock.balanceSheet().yearly().getKey("Current Liabilities"))
+        row = self.writeData(worksheet, row, {"Current Ratio": [currentRatio, "ratio"]})
+        row = self.writeData(worksheet, row, {"Net Working Capital": [stock.analytics().netWorkingCapital(), "num"]})
+        row = self.writeData(worksheet, row, {"ROIC": [stock.analytics().roic(), "pct"]})
+        # row = self.writeData(worksheet, row, {"Net Working Capital": [stock.calNetWorkingCap(), "num"]})
+        # row = self.writeData(worksheet, row, {"ROIC": [stock.calcROIC(), "pct"]})
 
         # row += 2
         # worksheet.write("A{0}".format(row), 'Ratios', self.h3)

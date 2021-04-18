@@ -37,6 +37,13 @@ class Yearly:
     def allYears(self):
         return self.__cashflows
 
+    def getKey(self, key): 
+        resp = {}
+        for year, cf in self.__cashflows.items():
+            resp.update({year: cf[key]})
+        return resp
+
+
 class Quarterly:
 
     __cashflows = {} # Private attribute, load method should be use to fill this

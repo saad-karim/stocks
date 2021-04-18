@@ -36,6 +36,12 @@ class Yearly:
             return self.incomes[year]
         return {}
 
+    def getKey(self, key): 
+        resp = {}
+        for year, income in self.incomes.items():
+            resp.update({year: income[key]})
+        return resp
+
 class Quarterly:
 
     incomes = defaultdict(list)
@@ -64,6 +70,12 @@ class Quarterly:
                 return self.incomes[year][qtr]
 
         return {}
+
+    def getKey(self, key): 
+        resp = {}
+        for qtr, income in self.incomes.items():
+            resp.update({qtr: income[key]})
+        return resp
 
     def ttmEPS(self):
         addedQtrs = 0

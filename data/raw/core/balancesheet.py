@@ -7,6 +7,9 @@ def genRespWithYear(balanceSheet, year):
         "Current Liabilities": balanceSheet["totalCurrentLiabilities"],
         "Shareholder Equity": balanceSheet["totalStockholdersEquity"],
         "Cash": balanceSheet["cashAndCashEquivalents"],
+        "Long-Term Debt": balanceSheet["longTermDebt"],
+        "Common Stock": balanceSheet["commonStock"],
+        "Retained Earnings": balanceSheet["retainedEarnings"],
     }
 
 class Yearly:
@@ -34,6 +37,12 @@ class Yearly:
 
     def allYears(self):
         return self.__sheets
+
+    def getKey(self, key): 
+        resp = {}
+        for year, sheet in self.__sheets.items():
+            resp.update({year: sheet[key]})
+        return resp
 
 class Quarterly:
 

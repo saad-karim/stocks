@@ -5,6 +5,9 @@ from data.raw.core.cashflow import CashFlow
 from data.raw.core.dividend import Dividend
 from data.raw.realtime.price import Price
 from data.raw.advanced.fundamentals import Fundamentals
+from data.analytics.trend import Trend
+from data.analytics.ratio import Ratio
+from data.analytics.analytics import Analytics
 
 class Stock:
 
@@ -24,6 +27,11 @@ class Stock:
 
         # Advanced
         self._fundamentals = Fundamentals()
+
+        # Analysis
+        self._trends = Trend()
+        self._ratios = Ratio()
+        self._analytics = Analytics(self._income, self._balanceSheet, self._cashFlow)
 
         # self.rawData = RawData(symb, api)
         # self.metrics = Metrics(self.rawData)
@@ -63,6 +71,15 @@ class Stock:
     def advancedFundamentals(self):
         return self._fundamentals
 
+    def trends(self):
+        return self._trends
+
+    def ratios(self):
+        return self._ratios
+
+    def analytics(self):
+        return self._analytics
+
     def calcFCF(self):
         fcf = [None, None, None, None] # TODO: Get quarterly data as well
 
@@ -95,6 +112,9 @@ class Stock:
             'Realtime Price': '=GOOGLEFINANCE("{0}", "price")'.format(self.symb),
             'EPS': '=GOOGLEFINANCE("{0}", "eps")'.format(self.symb),
             'PE Ratio': '=GOOGLEFINANCE("{0}", "pe")'.format(self.symb),
+            'Market Cap': '=GOOGLEFINANCE("{0}", "marketcap")'.format(self.symb),
+            'Beta': '=GOOGLEFINANCE("{0}", "beta")'.format(self.symb),
+            'Outstanding Shares': '=GOOGLEFINANCE("{0}", "shares")'.format(self.symb),
         }
 
         return data

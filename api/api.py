@@ -39,6 +39,9 @@ class Sandbox:
     def dcf(self, symbol):
         return self.fmp.dcf(symbol)
 
+    def financialRatios(self, symbol):
+        return self.fmp.financialRatios(symbol)
+
 
 class Prod:
 

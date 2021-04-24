@@ -54,6 +54,10 @@ class RawDataFetcher:
         resp = self.api.advanceFundamentals(symb, Annual, self.years)
         return self.translator.advancedFundamentals.yearly(resp)
 
+    def yearlyFinancialRatios(self, symb):
+        resp = self.api.financialRatios(symb)
+        return resp
+
     # Realtime
     # Quote data
     def quote(self, symb):

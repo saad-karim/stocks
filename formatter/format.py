@@ -78,3 +78,9 @@ def advanced(fundamentals):
         'Investing Cash Flow': [generate(fundamentals, "Investing Cash Flow"), "money"],
         'Financing Cash Flow': [generate(fundamentals, "Financing Cash Flow"), "money"],
     }
+
+
+def financialRatios(ratios):
+    return {
+        'Current Ratio': [generate(ratios, "Current Ratio"), "num"],
+    }

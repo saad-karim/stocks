@@ -137,13 +137,13 @@ class Writer:
         row = self.writeData(worksheet, row, {"PBV Ratio": [stock.analytics().pbvRatio(), "ratio"]})
         row = self.writeData(worksheet, row, {"EPS": [stock.analytics().eps(), "ratio"]})
         row = self.writeData(worksheet, row, {"PE Ratio": [stock.analytics().peRatio(), "ratio"]})
+        row = self.writeData(worksheet, row, {"ROIC": [stock.analytics().roic(), "pct"]})
 
         # Ratios
-        currentRatio = stock.ratios().calc(stock.balanceSheet().yearly().getKey("Current Assets"),
-                                           stock.balanceSheet().yearly().getKey("Current Liabilities"))
-
-        row = self.writeData(worksheet, row, {"Current Ratio": [currentRatio, "ratio"]})
-        row = self.writeData(worksheet, row, {"ROIC": [stock.analytics().roic(), "pct"]})
+        # currentRatio = stock.ratios().calc(stock.balanceSheet().yearly().getKey("Current Assets"),
+        #                                    stock.balanceSheet().yearly().getKey("Current Liabilities"))
+        # row = self.writeData(worksheet, row, {"Current Ratio": [currentRatio, "ratio"]})
+        row = self.writeBlock('Ratios', worksheet, row, formatter.format.financialRatios(stock.financialRatios()))
 
         # Write analysis data
         row = self.analysisDataHeader('Analysis', worksheet, row)

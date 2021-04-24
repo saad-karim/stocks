@@ -1,4 +1,3 @@
-from metrics import Metrics
 from data.raw.core.income import Income
 from data.raw.core.balancesheet import BalanceSheet
 from data.raw.core.cashflow import CashFlow
@@ -6,6 +5,7 @@ from data.raw.core.dividend import Dividend
 from data.raw.realtime.price import Price
 from data.raw.realtime.quote import Quote
 from data.raw.advanced.fundamentals import Fundamentals
+from data.raw.advanced.ratios import Ratios
 from data.analytics.trend import Trend
 from data.analytics.ratio import Ratio
 from data.analytics.analytics import Analytics
@@ -30,6 +30,7 @@ class Stock:
 
         # Advanced
         self._fundamentals = Fundamentals()
+        self._financialRatios = Ratios()
 
         # Analysis
         self._ratios = Ratio()
@@ -72,6 +73,8 @@ class Stock:
 
         self._fundamentals.yearly().load(
             self.dataFetcher.yearlyAdvanceFundamentals(self.symb))
+        self._financialRatios.yearly().load(
+            self.dataFetcher.yearlyFinancialRatios(self.symb))
 
     def price(self):
         return self._price
@@ -90,6 +93,9 @@ class Stock:
 
     def advancedFundamentals(self):
         return self._fundamentals
+
+    def financialRatios(self):
+        return self._financialRatios
 
     def quote(self):
         return self._quote

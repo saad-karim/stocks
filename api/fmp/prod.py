@@ -230,6 +230,26 @@ class Prod:
 
         return response.json()
 
+    def financialRatios(self, symbol):
+        log.info("Getting financial ratios: %s", symbol)
+
+        if not bool(self.refresh):
+            cachedResponse = self.readCache(symbol, "financialratios")
+            if cachedResponse is not None:
+                return cachedResponse
+
+        url = baseURL+"/ratios/"+symbol+"?limit=5&apikey=" + self.token
+        log.info("Realtime data URL: %s", url)
+
+        response = self.session.get(url)
+
+        log.info("Status Code: %s", response.status_code)
+        log.debug("Response: %s", response.json())
+
+        self.writeCache(symbol, "financialratios", response.json())
+
+        return response.json()
+
     def writeCache(self, symbol, api, data):
         cacheDir = os.path.join(self.cacheLocation, symbol)
         path = os.path.join(cacheDir, api + ".json")

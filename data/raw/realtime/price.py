@@ -6,6 +6,8 @@ class Price:
         return
 
     def parse(self, raw):
+        self.price = raw
+
         resp = self.genResp(raw)
         self.resp = resp
         return self

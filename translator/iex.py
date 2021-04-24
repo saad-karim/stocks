@@ -63,7 +63,7 @@ class _CashFlow:
             flow["investingCashFlow"] = flow.pop("totalInvestingCashFlows")
             flow["financingCashFlow"] = flow.pop("cashFlowFinancing")
             flow["netChangeInCash"] = flow.pop("cashChange")
-            flow["freeCashFlow"] = flow.pop("cashFlow")
+            flow["operatingCashFlow"] = flow.pop("cashFlow")
         return flows
         
 class _Dividend:

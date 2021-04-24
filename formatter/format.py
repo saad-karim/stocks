@@ -26,7 +26,6 @@ def dividend(dividend):
 
 def income(income):
     return {
-        'Interest Expense': [generate(income, "Interest Expense"), "ratio"],
         'Total Revenue': [generate(income, "Total Revenue"), "money"],
         'EBIT': [generate(income, "EBIT"), "money"], 
         'Net Income': [generate(income, "Net Income"), "money"],
@@ -41,17 +40,18 @@ def balanceSheet(balancesheet):
         'Current Assets': [generate(balancesheet, "Current Assets"), "money"],
         'Current Liabilities': [generate(balancesheet, "Current Liabilities"), "money"],
         'Shareholder Equity': [generate(balancesheet, "Shareholder Equity"), "money"],
+        'Common Stock': [generate(balancesheet, "Common Stock"), "num"],
     }
 
 def cashFlow(cashFlow):
     return {
         'Capital Expenditures': [generate(cashFlow, "Capital Expenditures"), "money"],
         'Net Change in Cash': [generate(cashFlow, "Net Change in Cash"), "money"],
+        'Operating Cash Flow': [generate(cashFlow, "Operating Cash Flow"), "money"],
+        'Investing Cash Flow': [generate(cashFlow, "Investing Cash Flow"), "money"],
+        'Financing Cash Flow': [generate(cashFlow, "Financing Cash Flow"), "money"],
         # 'Free Cash Flow': [generate(cashFlow, "Free Cash Flow"), "money"],
         # 'Stock BuyBack': [generate(cashFlow, "Stock Buyback"), "money"],
-        # 'Operating Cash Flow': [generate(cashFlow, "Operating Cash Flow"), "money"],
-        # 'Investing Cash Flow': [generate(cashFlow, "Investing Cash Flow"), "money"],
-        # 'Financing Cash Flow': [generate(cashFlow, "Financing Cash Flow"), "money"],
     }
 
 def advanced(fundamentals):

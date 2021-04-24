@@ -7,6 +7,9 @@ name = "pypi"
 xlsxwriter = "*"
 numpy = "*"
 requests = "*"
+numpy-financial = "*"
+pycodestyle = "*"
+pylint = "*"
 
 [dev-packages]
 

@@ -3,7 +3,6 @@ import loader.date as loader
 def genRespWithYear(raw, year):
     return {
         "Year": year,
-        "Free Cash Flow": raw["freeCashFlow"],
         "Operating Cash Flow": raw.get("operatingCashFlow"),
         "Investing Cash Flow": raw.get("investingCashFlow"),
         "Financing Cash Flow": raw.get("financingCashFlow"),

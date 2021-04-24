@@ -29,9 +29,9 @@ class Stock:
         self._fundamentals = Fundamentals()
 
         # Analysis
-        self._trends = Trend()
         self._ratios = Ratio()
-        self._analytics = Analytics(self._income, self._balanceSheet, self._cashFlow)
+        self._analytics = Analytics(self._price, self._income, self._balanceSheet, self._cashFlow)
+        self._trends = Trend(self._income, self._balanceSheet, self._cashFlow)
 
         # self.rawData = RawData(symb, api)
         # self.metrics = Metrics(self.rawData)

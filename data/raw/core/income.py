@@ -10,6 +10,7 @@ def genRespWithYear(income, year):
         "Net Income": income["netIncome"],
         "Gross Profit": income["grossProfit"],
         "Operating Income": income["operatingIncome"],
+        "Net Income for EPS": income["netIncomeBasic"],
         # "Interest Expense": income["interestExpense"],
         # "EPS": income["eps"],
     }

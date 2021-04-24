@@ -5,6 +5,7 @@ import formatter.format
 
 log = logging.getLogger("writer")
 
+
 class Writer:
 
     def __init__(self, stock):
@@ -75,7 +76,7 @@ class Writer:
 
         for x in range(5):
             worksheet.write(row-1, x+len(qtrs)+1, int(currentYear) - x - 1, self.h2)
-        
+
         return row
 
     def analysisDataHeader(self, title, worksheet, row):
@@ -96,9 +97,9 @@ class Writer:
             worksheet.write(row-1, col_num+len(qtrs)+1, year, self.h2)
 
         worksheet.write(row-1, 10, 'Y2Y Overall', self.h2)
-        
+
         return row
-        
+
     def write(self):
         stock = self.stock
 
@@ -112,29 +113,48 @@ class Writer:
 
         # Write realtime data
         row = self.writeBlock('Realtime Data', worksheet, row, stock.realtimeData())
+        row = self.writeData(worksheet, row, {"NPV Per Stock": [stock.analytics().intrinsicValue(), "ratio"]})
 
         # Write assumption data
         row = self.writeBlock('Assumptions', worksheet, row, formatter.format.price(stock.price()))
- 
+
         # Write core data
         row = self.coreDataHeader('Core Data', worksheet, row)
         row = self.writeBlock('General', worksheet, row, formatter.format.dividend(stock.dividend()))
         row = self.writeBlock('Income', worksheet, row, formatter.format.income(stock.income()))
         row = self.writeBlock('Balance Sheet', worksheet, row, formatter.format.balanceSheet(stock.balanceSheet()))
-        row = self.writeBlock('Cash Flow', worksheet, row, formatter.format.cashFlow(stock.cashFlow()), formatter.format.advanced(stock.advancedFundamentals()), stock.calcFCF())
+        row = self.writeBlock('Cash Flow', worksheet, row, formatter.format.cashFlow(stock.cashFlow()))
+        # row = self.writeBlock('Cash Flow', worksheet, row, formatter.format.cashFlow(stock.cashFlow()), \
+        # formatter.format.advanced(stock.advancedFundamentals()), stock.calcFCF())
+
+        # Advanced Data
+        row = self.coreDataHeader('Advanced Data', worksheet, row)
+
+        # Metrics
+        row = self.writeData(worksheet, row, {"Net Working Capital": [stock.analytics().netWorkingCapital(), "num"]})
+        row = self.writeData(worksheet, row, {"Free Cash Flow": [stock.analytics().fcf(), "num"]})
+        row = self.writeData(worksheet, row, {"Book Value per Share": [stock.analytics().bvps(), "ratio"]})
+        row = self.writeData(worksheet, row, {"PBV Ratio": [stock.analytics().pbvRatio(), "ratio"]})
+        row = self.writeData(worksheet, row, {"EPS": [stock.analytics().eps(), "ratio"]})
+        row = self.writeData(worksheet, row, {"PE Ratio": [stock.analytics().peRatio(), "ratio"]})
+
+        # Ratios
+        currentRatio = stock.ratios().calc(stock.balanceSheet().yearly().getKey("Current Assets"),
+                                           stock.balanceSheet().yearly().getKey("Current Liabilities"))
+
+        row = self.writeData(worksheet, row, {"Current Ratio": [currentRatio, "ratio"]})
+        row = self.writeData(worksheet, row, {"ROIC": [stock.analytics().roic(), "pct"]})
 
         # Write analysis data
         row = self.analysisDataHeader('Analysis', worksheet, row)
+
+        # Trends
         incomeTrend = stock.trends().netIncome(stock.income().yearly().getKey("Net Income"))
         worksheet.write(row, 10, incomeTrend["overallTrend"], self.pct)
         row = self.writeData(worksheet, row, {"Net Income Trend": [incomeTrend["yearlyTrend"], "pct"]})
-
-        currentRatio = stock.ratios().calc(stock.balanceSheet().yearly().getKey("Current Assets"), stock.balanceSheet().yearly().getKey("Current Liabilities"))
-        row = self.writeData(worksheet, row, {"Current Ratio": [currentRatio, "ratio"]})
-        row = self.writeData(worksheet, row, {"Net Working Capital": [stock.analytics().netWorkingCapital(), "num"]})
-        row = self.writeData(worksheet, row, {"ROIC": [stock.analytics().roic(), "pct"]})
-        # row = self.writeData(worksheet, row, {"Net Working Capital": [stock.calNetWorkingCap(), "num"]})
-        # row = self.writeData(worksheet, row, {"ROIC": [stock.calcROIC(), "pct"]})
+        epsTrend = stock.analytics().epsGrowth()
+        worksheet.write(row, 10, epsTrend["overallTrend"], self.pct)
+        row = self.writeData(worksheet, row, {"EPS Growth": [epsTrend["yearlyTrend"], "pct"]})
 
         # row += 2
         # worksheet.write("A{0}".format(row), 'Ratios', self.h3)
@@ -145,9 +165,5 @@ class Writer:
         # row += 2
         # worksheet.write("A{0}".format(row), 'Growth', self.h3)
         # row = self.writeData(worksheet, row, stock.rawData.financialGrowth.output())
-
-        # row += 2
-        # worksheet.write("A{0}".format(row), 'Metrics', self.h3)
-        # row = self.writeData(worksheet, row, stock.realtimeMetrics())
 
         self.workbook.close()

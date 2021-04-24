@@ -4,8 +4,9 @@ import numpy_financial as npf
 
 class Analytics:
 
-    def __init__(self, price, inc, bs, cf):
+    def __init__(self, price, quote, inc, bs, cf):
         self._price = price
+        self._quote = quote
         self._inc = inc
         self._bs = bs
         self._cf = cf
@@ -130,31 +131,21 @@ class Analytics:
         # 5. Take last cash flow times 10 to get terminal value
         # 6. Add terminal value plus cash flows
         fcfs = self.fcf()
-        print("fcfs: ", fcfs)
 
         fcfGrowthRate = self._trend.fcfGrowth(fcfs)["overallTrend"]
-        print("fcf growth rate: ", fcfGrowthRate)
-
         currentfcf = fcfs[4]
-        print("current fcf", currentfcf)
-
         firstYear = currentfcf * (1 + fcfGrowthRate)
-        print("first year", firstYear)
 
         futureCashFlows = [firstYear]
         for x in range(9):
             futureCashFlows.append(futureCashFlows[x]*(1 + fcfGrowthRate))
 
-        print("future cash flows", futureCashFlows)
         npv = npf.npv(0.15, futureCashFlows)
 
-        terminalValue = pvs[9] * 10
-        value = terminalValue + npv
+        terminalValue = futureCashFlows[9] * 10
+        instrincValue = terminalValue + npv
 
-        cs = self._bs.yearly().getKey("Common Stock")
-        print("cs: ", cs)
-        ivPerStock = npv / cs[2020]  # TODO: Get number of shares as real time data
-
-        print("iv per stock", ivPerStock)
+        cs = self._quote.get()["sharesOutstanding"]
+        ivPerStock = instrincValue / cs
 
         return ivPerStock

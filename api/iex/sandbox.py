@@ -11,6 +11,7 @@ headers = {
     'User-Agent': 'user-agent',
 }
 
+
 class Sandbox:
 
     session = requests.Session()
@@ -26,10 +27,12 @@ class Sandbox:
         cacheName = "dividends-{}".format(range)
 
         cachedResponse = self.readCache(symbol, cacheName)
-        if cachedResponse != None:
+        if cachedResponse is not None:
             return cachedResponse
 
-        resource = "/dividends/{range}?token={token}".format(range=range, token=self.token)
+        resource = "/dividends/{range}?token={token}". \
+            format(range=range, token=self.token)
+
         url = baseURL+symbol+resource
         log.info("Dividend URL: %s", url)
 
@@ -47,10 +50,12 @@ class Sandbox:
         cacheName = "cashflow-{}".format(period)
 
         cachedResponse = self.readCache(symbol, cacheName)
-        if cachedResponse != None:
+        if cachedResponse is not None:
             return cachedResponse
 
-        resource = "/cash-flow?period={period}&last={last}&token={token}".format(period=period, last=last, token=self.token)
+        resource = "/cash-flow?period={period}&last={last}&token={token}". \
+            format(period=period, last=last, token=self.token)
+
         url = baseURL+symbol+resource
         log.info("Cash-Flow URL: %s", url)
 
@@ -68,10 +73,12 @@ class Sandbox:
         cacheName = "income-{}".format(period)
 
         cachedResponse = self.readCache(symbol, cacheName)
-        if cachedResponse != None:
+        if cachedResponse is not None:
             return cachedResponse
 
-        resource = "/income?period={period}&last={last}&token={token}".format(period=period, last=last, token=self.token)
+        resource = "/income?period={period}&last={last}&token={token}". \
+            format(period=period, last=last, token=self.token)
+
         url = baseURL+symbol+resource
         log.info("Income URL: %s", url)
 
@@ -89,10 +96,12 @@ class Sandbox:
         cacheName = "balancesheet-{}".format(period)
 
         cachedResponse = self.readCache(symbol, cacheName)
-        if cachedResponse != None:
+        if cachedResponse is not None:
             return cachedResponse
 
-        resource = "/balance-sheet?period={period}&last={last}&token={token}".format(period=period, last=last, token=self.token)
+        resource = "/balance-sheet?period={period}&last={last}&token={token}". \
+            format(period=period, last=last, token=self.token)
+
         url = baseURL+symbol+resource
         log.info("Balance Sheet URL: %s", url)
 
@@ -109,7 +118,7 @@ class Sandbox:
         log.info("Getting key stats information for: %s", symbol)
 
         cachedResponse = self.readCache(symbol, "keystats")
-        if cachedResponse != None:
+        if cachedResponse is not None:
             return cachedResponse
 
         url = baseURL+symbol+"/stats?token=" + self.token
@@ -128,7 +137,7 @@ class Sandbox:
         log.info("Getting advanced stats information for: %s", symbol)
 
         cachedResponse = self.readCache(symbol, "advancedkeystats")
-        if cachedResponse != None:
+        if cachedResponse is not None:
             return cachedResponse
 
         url = baseURL+symbol+"/advanced-stats?token=" + self.token
@@ -147,7 +156,7 @@ class Sandbox:
         log.info("Getting price information for: %s", symbol)
 
         cachedResponse = self.readCache(symbol, "price")
-        if cachedResponse != None:
+        if cachedResponse is not None:
             return cachedResponse
 
         url = baseURL+symbol+"/price?token=" + self.token
@@ -167,11 +176,13 @@ class Sandbox:
         cacheName = "advancefundamentals-{}".format(period)
 
         cachedResponse = self.readCache(symbol, cacheName)
-        if cachedResponse != None:
+        if cachedResponse is not None:
             return cachedResponse
 
         base = "https://sandbox.iexapis.com/stable"
-        resource = "/time-series/fundamentals/{symbol}/{period}?last={last}&token={token}".format(symbol=symbol, period=period, last=last, token=self.token)
+        resource = "/time-series/fundamentals/{symbol}/{period}?last={last}&token={token}". \
+            format(symbol=symbol, period=period, last=last, token=self.token)
+
         url = base+resource
         log.info("Price URL: %s", url)
 

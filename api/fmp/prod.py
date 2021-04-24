@@ -11,6 +11,7 @@ headers = {
     'User-Agent': 'user-agent',
 }
 
+
 class Prod:
 
     session = requests.Session()
@@ -26,10 +27,11 @@ class Prod:
 
         if not bool(self.refresh):
             cachedResponse = self.readCache(symbol, "dividendquarter")
-            if cachedResponse != None:
+            if cachedResponse is not None:
                 return cachedResponse
 
         url = baseURL+"/historical-price-full/stock_dividend/"+symbol+"?apikey=" + self.token
+
         log.info("Dividend URL: %s", url)
 
         response = self.session.get(url)
@@ -46,10 +48,11 @@ class Prod:
 
         if not bool(self.refresh):
             cachedResponse = self.readCache(symbol, "income"+period)
-            if cachedResponse != None:
+            if cachedResponse is not None:
                 return cachedResponse
 
         url = baseURL+"/income-statement/"+symbol+"?period="+period+"&apikey=" + self.token
+
         log.info("Income URL: %s", url)
 
         response = self.session.get(url)
@@ -66,10 +69,11 @@ class Prod:
 
         if not bool(self.refresh):
             cachedResponse = self.readCache(symbol, "balancesheet"+period)
-            if cachedResponse != None:
+            if cachedResponse is not None:
                 return cachedResponse
 
         url = baseURL+"/balance-sheet-statement/"+symbol+"?period="+period+"&apikey=" + self.token
+
         log.info("Balance Sheet URL: %s", url)
 
         response = self.session.get(url)
@@ -86,10 +90,11 @@ class Prod:
 
         if not bool(self.refresh):
             cachedResponse = self.readCache(symbol, "ratios"+period)
-            if cachedResponse != None:
+            if cachedResponse is None:
                 return cachedResponse
 
         url = baseURL+"/ratios/"+symbol+"?period="+period+"&apikey=" + self.token
+
         log.info("Financial ratios URL: %s", url)
 
         response = self.session.get(url)
@@ -106,10 +111,11 @@ class Prod:
 
         if not bool(self.refresh):
             cachedResponse = self.readCache(symbol, "keymetrics"+period)
-            if cachedResponse != None:
+            if cachedResponse is not None:
                 return cachedResponse
 
         url = baseURL+"/key-metrics/"+symbol+"?period="+period+"&apikey=" + self.token
+
         log.info("Key Metrics URL: %s", url)
 
         response = self.session.get(url)
@@ -126,10 +132,11 @@ class Prod:
 
         if not bool(self.refresh):
             cachedResponse = self.readCache(symbol, "cashflow"+period)
-            if cachedResponse != None:
+            if cachedResponse is not None:
                 return cachedResponse
 
         url = baseURL+"/cash-flow-statement/"+symbol+"?period="+period+"&apikey=" + self.token
+
         log.info("Cash Flow URL: %s", url)
 
         response = self.session.get(url)
@@ -146,10 +153,11 @@ class Prod:
 
         if not bool(self.refresh):
             cachedResponse = self.readCache(symbol, "enterprisevalues"+period)
-            if cachedResponse != None:
+            if cachedResponse is not None:
                 return cachedResponse
 
         url = baseURL+"/enterprise-values/"+symbol+"?period="+period+"&apikey=" + self.token
+
         log.info("Cash Flow URL: %s", url)
 
         response = self.session.get(url)
@@ -166,10 +174,11 @@ class Prod:
 
         if not bool(self.refresh):
             cachedResponse = self.readCache(symbol, "financialgrowth"+period)
-            if cachedResponse != None:
+            if cachedResponse is not None:
                 return cachedResponse
 
         url = baseURL+"/financial-growth/"+symbol+"?period="+period+"&apikey=" + self.token
+
         log.info("Financial Growth URL: %s", url)
 
         response = self.session.get(url)
@@ -178,6 +187,46 @@ class Prod:
         log.debug("Response: %s", response.json())
 
         self.writeCache(symbol, "financialgrowth"+period, response.json())
+
+        return response.json()
+
+    def quote(self, symbol):
+        log.info("Getting quote: %s", symbol)
+
+        if not bool(self.refresh):
+            cachedResponse = self.readCache(symbol, "realtime")
+            if cachedResponse is not None:
+                return cachedResponse
+
+        url = baseURL+"/quote/"+symbol+"?apikey=" + self.token
+        log.info("Realtime data URL: %s", url)
+
+        response = self.session.get(url)
+
+        log.info("Status Code: %s", response.status_code)
+        log.debug("Response: %s", response.json())
+
+        self.writeCache(symbol, "realtime", response.json())
+
+        return response.json()
+
+    def dcf(self, symbol):
+        log.info("Getting DCF (intrinsic value): %s", symbol)
+
+        if not bool(self.refresh):
+            cachedResponse = self.readCache(symbol, "dcf")
+            if cachedResponse is not None:
+                return cachedResponse
+
+        url = baseURL+"/discounted-cash-flow/"+symbol+"?apikey=" + self.token
+        log.info("Realtime data URL: %s", url)
+
+        response = self.session.get(url)
+
+        log.info("Status Code: %s", response.status_code)
+        log.debug("Response: %s", response.json())
+
+        self.writeCache(symbol, "dcf", response.json())
 
         return response.json()
 

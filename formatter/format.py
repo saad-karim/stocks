@@ -1,5 +1,6 @@
 import loader.date as loader
 
+
 def generate(data, key):
     currentYear = loader.currentYear()
     return [
@@ -14,15 +15,28 @@ def generate(data, key):
         data.yearly().year(currentYear-5).get(key),
     ]
 
+
 def price(price):
     return {
         'Price Used for Calculations': [[price.resp.get("Price")], "money"],
     }
 
+
+def quote(quote):
+    return {
+        'Price': [[quote['price']], 'money'],
+        'Market Cap': [[quote['marketCap']], 'money'],
+        'EPS': [[quote['eps']], 'num'],
+        'PE': [[quote['pe']], 'num'],
+        'Shares Outstanding': [[quote['sharesOutstanding']], 'num'],
+    }
+
+
 def dividend(dividend):
     return {
         'Dividend Amount': [generate(dividend, "Amount"), "money"],
     }
+
 
 def income(income):
     return {
@@ -34,14 +48,16 @@ def income(income):
         'EPS': [generate(income, "EPS"), "money"],
     }
 
+
 def balanceSheet(balancesheet):
     return {
         'Cash': [generate(balancesheet, "Cash"), "money"],
         'Current Assets': [generate(balancesheet, "Current Assets"), "money"],
-        'Current Liabilities': [generate(balancesheet, "Current Liabilities"), "money"],
+        'Current Liabilities': [generate(balancesheet, "Current Liabilities"),"money"],
         'Shareholder Equity': [generate(balancesheet, "Shareholder Equity"), "money"],
         'Common Stock': [generate(balancesheet, "Common Stock"), "num"],
     }
+
 
 def cashFlow(cashFlow):
     return {
@@ -53,6 +69,7 @@ def cashFlow(cashFlow):
         # 'Free Cash Flow': [generate(cashFlow, "Free Cash Flow"), "money"],
         # 'Stock BuyBack': [generate(cashFlow, "Stock Buyback"), "money"],
     }
+
 
 def advanced(fundamentals):
     return {

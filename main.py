@@ -41,15 +41,16 @@ else:
 if envir == "prod":
     fmpKey = os.getenv("FMP_PRODUCTION_KEY")
     iexKey = os.getenv("IEX_PRODUCTION_KEY")
-    if key == None:
+    if key is None:
         raise Exception("production api key not set")
     stockapi = api.api.Prod(fmpKey, iexKey, "./cache/prod", refresh)
 
 if envir == "sandbox":
-    key = os.getenv("SANDBOX_KEY")
-    if key == None:
+    fmpKey = os.getenv("FMP_PRODUCTION_KEY")
+    iexKey = os.getenv("SANDBOX_KEY")
+    if key is None:
         raise Exception("sandbox api key not set")
-    stockapi = api.iex.sandbox.Sandbox(key, "./cache", refresh)
+    stockapi = api.api.Sandbox(fmpKey, iexKey, "./cache", refresh)
 
 # TODO:
 
@@ -58,7 +59,8 @@ if envir == "sandbox":
 # 3. Add chart of historical data
 # 6. Debt acquired each year
 # 8. Look out and investigate huge jumps in cash from investing activities
-# 10. Look for negative operations cash flow and positive finance cash flow, bad sign
+# 10. Look for negative operations cash flow and positive
+# finance cash flow, bad sign
 # - Stock splits
 # - Operating Cash Flow per Share
 # - Long term debt along side total debt

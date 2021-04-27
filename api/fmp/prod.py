@@ -85,15 +85,17 @@ class Prod:
 
         return response.json()
 
-    def financialRatios(self, symbol, period):
+    def financialRatios(self, symbol, period, length):
         log.info("Getting %s financial information for: %s", period, symbol)
 
         if not bool(self.refresh):
-            cachedResponse = self.readCache(symbol, "ratios"+period)
-            if cachedResponse is None:
+            cachedResponse = self.readCache(symbol, "ratios-"+period)
+            if cachedResponse is not None:
                 return cachedResponse
 
-        url = baseURL+"/ratios/"+symbol+"?period="+period+"&apikey=" + self.token
+        # url = baseURL+"/ratios/"+symbol+"?period="+period+"&limit="+length+"&apikey=" + self.token
+        url = baseURL+"/ratios/{symbol}?period={period}&limit={length}&apikey={token}". \
+            format(symbol=symbol, period=period, length=length, token=self.token)
 
         log.info("Financial ratios URL: %s", url)
 
@@ -102,7 +104,7 @@ class Prod:
         log.info("Status Code: %s", response.status_code)
         log.debug("Response: %s", response.json())
 
-        self.writeCache(symbol, "ratios"+period, response.json())
+        self.writeCache(symbol, "ratios-"+period, response.json())
 
         return response.json()
 
@@ -227,26 +229,6 @@ class Prod:
         log.debug("Response: %s", response.json())
 
         self.writeCache(symbol, "dcf", response.json())
-
-        return response.json()
-
-    def financialRatios(self, symbol):
-        log.info("Getting financial ratios: %s", symbol)
-
-        if not bool(self.refresh):
-            cachedResponse = self.readCache(symbol, "financialratios")
-            if cachedResponse is not None:
-                return cachedResponse
-
-        url = baseURL+"/ratios/"+symbol+"?limit=5&apikey=" + self.token
-        log.info("Realtime data URL: %s", url)
-
-        response = self.session.get(url)
-
-        log.info("Status Code: %s", response.status_code)
-        log.debug("Response: %s", response.json())
-
-        self.writeCache(symbol, "financialratios", response.json())
 
         return response.json()
 

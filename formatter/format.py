@@ -83,4 +83,13 @@ def advanced(fundamentals):
 def financialRatios(ratios):
     return {
         'Current Ratio': [generate(ratios, "Current Ratio"), "num"],
+        'Quick Ratio': [generate(ratios, "Quick Ratio"), "num"],
+        'Gross Profit Margin': [generate(ratios, "Gross Profit Margin"), "num"],
+        "Operating Profit Margin": [generate(ratios, "Operating Profit Margin"), "num"],
+        "Return on Assets": [generate(ratios, "Return on Assets"), "num"],
+        "Return on Equity": [generate(ratios, "Return on Equity"), "num"],
+        "Debt Ratio": [generate(ratios, "Debt Ratio"), "num"],
+        "Debt Equity Ratio": [generate(ratios, "Debt Equity Ratio"), "num"],
+        "Cash Flow to Debt Ratio": [generate(ratios, "Cash Flow to Debt Ratio"), "num"],
+        "Price to Book Ratio": [generate(ratios, "Price to Book Ratio"), "num"],
     }

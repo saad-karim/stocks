@@ -1,86 +1,26 @@
 import loader.date as loader
+from data.data import Yearly, Quarterly
 
-def genRespWithYear(balanceSheet, year):
+
+def translate(raw):
+    recordDate = raw["date"]
+    year = loader.getDate(recordDate)
     return {
         "Year": year,
-        "Current Assets": balanceSheet["totalCurrentAssets"],
-        "Current Liabilities": balanceSheet["totalCurrentLiabilities"],
-        "Shareholder Equity": balanceSheet["totalStockholdersEquity"],
-        "Cash": balanceSheet["cashAndCashEquivalents"],
-        "Long-Term Debt": balanceSheet["longTermDebt"],
-        "Common Stock": balanceSheet["commonStock"],
-        "Retained Earnings": balanceSheet["retainedEarnings"],
+        "Current Assets": raw["totalCurrentAssets"],
+        "Current Liabilities": raw["totalCurrentLiabilities"],
+        "Shareholder Equity": raw["totalStockholdersEquity"],
+        "Cash": raw["cashAndCashEquivalents"],
+        "Long-Term Debt": raw["longTermDebt"],
+        "Common Stock": raw["commonStock"],
+        "Retained Earnings": raw["retainedEarnings"],
     }
 
-class Yearly:
-
-    __sheets = {}
-
-    def __init__(self):
-        return
-
-    def load(self, sheets):
-        for sheet in sheets:
-            resp = self.data(sheet)
-            self.__sheets[resp["Year"]] = resp
-
-    def data(self, sheet):
-        recordDate = sheet["date"]
-        year = loader.getDate(recordDate)
-        return genRespWithYear(sheet, year)
-
-    def year(self, year):
-        if year in self.__sheets:
-            return self.__sheets[year]
-
-        return {}
-
-    def allYears(self):
-        return self.__sheets
-
-    def getKey(self, key): 
-        resp = {}
-        for year, sheet in self.__sheets.items():
-            resp.update({year: sheet[key]})
-        return resp
-
-class Quarterly:
-
-    __sheets = {}
-
-    def __init__(self):
-        return
-
-    def load(self, sheets):
-        for sheet in sheets:
-            resp = self.data(sheet)
-            if resp != None:
-                self.__sheets[resp["Year"]] = {
-                    resp["Quarter"]: resp,
-                }
-
-    def data(self, sheet):
-        # recordDate = sheet["fillingDate"]
-        recordDate = sheet["date"]
-        year = loader.getDate(recordDate)
-        qtr = genRespWithYear(sheet, year)
-        qtr["Quarter"] = sheet["quarter"]
-        return qtr
-
-    def quarter(self, year, qtr):
-        if year in self.__sheets:
-            if qtr in self.__sheets[year]:
-                return self.__sheets[year][qtr]
-
-        return {}
-
-    def allQtrs(self):
-        return self.__sheets
 
 class BalanceSheet:
 
-    _yearly = Yearly()
-    _quarterly = Quarterly()
+    _yearly = Yearly(translate)
+    _quarterly = Quarterly(translate)
 
     def __init__(self):
         return
@@ -90,3 +30,11 @@ class BalanceSheet:
 
     def quarterly(self):
         return self._quarterly
+
+    def allKeys(self, key):
+        qtrlyValues = self._quarterly.getKey(key)
+        print("q values: ", qtrlyValues)
+        yearlyValues = self._yearly.getKey(key)
+        print("y values: ", yearlyValues)
+        
+        return qtrlyValues.update(yearlyValues)

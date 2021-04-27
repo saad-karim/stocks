@@ -57,7 +57,8 @@ class Trend:
             if current == 0:
                 continue
 
-            trend.append(round((current-previous)/previous, 2))
+            if current is not None and previous is not None:
+                trend.append(round((current-previous)/previous, 2))
 
         # overallTrend = (point[0] - point[len(point)-1])/point[len(point)-1]
         overallTrend = 0
@@ -66,7 +67,7 @@ class Trend:
 
         overallTrend = overallTrend / len(trend)
 
-        trending = [0, 0, 0, 0]
+        trending = [None, None, None, None]
         trending.extend(trend)
 
         return {
@@ -94,7 +95,8 @@ class Trend:
             if current == 0:
                 continue
 
-            trend.append(round((current-previous)/previous, 2))
+            if current is not None and previous is not None:
+                trend.append(round((current-previous)/previous, 2))
 
         overallTrend = 0
         for i in trend:
@@ -102,7 +104,7 @@ class Trend:
 
         overallTrend = overallTrend / len(trend)
 
-        trending = [0, 0, 0, 0]
+        trending = [None, None, None, None]
         trending.extend(trend)
 
         return {

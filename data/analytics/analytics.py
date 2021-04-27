@@ -16,10 +16,14 @@ class Analytics:
         return self._trend.epsGrowth(self.eps())
 
     def netWorkingCapital(self):
-        nc = [0, 0, 0, 0]
+        nc = [None, None, None, None]
 
         assets = self._bs.yearly().getKey("Current Assets")
         liabilities = self._bs.yearly().getKey("Current Liabilities")
+        # assets = self._bs.allKeys("Current Assets")
+        # liabilities = self._bs.allKeys("Current Liabilities")
+
+        # print('assets: ', assets)
 
         if len(assets) != len(liabilities):
             raise Exception("number of elements in assets and liabilities \
@@ -36,7 +40,7 @@ class Analytics:
         bs = self._bs
         cf = self._cf
 
-        roic = [0, 0, 0, 0]
+        roic = [None, None, None, None]
         ebits = inc.yearly().getKey("EBIT")
         for i in ebits.keys():
             ebit = ebits[i]
@@ -64,7 +68,7 @@ class Analytics:
         capExpenses = cf.yearly().getKey("Capital Expenditures")
         operationCF = cf.yearly().getKey("Operating Cash Flow")
 
-        fcfs = [0, 0, 0, 0]
+        fcfs = [None, None, None, None]
         for i in capExpenses.keys():
             # Capital expenditures stored as negative values hence
             # the addition of the two
@@ -77,7 +81,7 @@ class Analytics:
         ni = self._inc.yearly().getKey("Net Income for EPS")
         cs = self._bs.yearly().getKey("Common Stock")
 
-        allEPS = [0, 0, 0, 0]
+        allEPS = [None, None, None, None]
         for i in ni.keys():
             allEPS.append(ni[i]/cs[i])
 
@@ -88,7 +92,7 @@ class Analytics:
         se = self._bs.yearly().getKey("Shareholder Equity")
         cs = self._bs.yearly().getKey("Common Stock")
 
-        allBVPS = [0, 0, 0, 0]
+        allBVPS = [None, None, None, None]
         for i in se.keys():
             allBVPS.append(se[i]/cs[i])
 
@@ -98,9 +102,9 @@ class Analytics:
     def pbvRatio(self):
         bvps = self.bvps()
 
-        pbv = [0, 0, 0, 0]
+        pbv = [None, None, None, None]
         for bvp in bvps:
-            if bvp == 0:
+            if bvp is None:
                 continue
 
             pbv.append(self._price.price/bvp)
@@ -111,9 +115,9 @@ class Analytics:
     def peRatio(self):
         allEPS = self.eps()
 
-        pes = [0, 0, 0, 0]
+        pes = [None, None, None, None]
         for eps in allEPS:
-            if eps == 0:
+            if eps is None:
                 continue
 
             pes.append(self._price.price/eps)

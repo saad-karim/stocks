@@ -1,69 +1,28 @@
 import loader.date as loader
+from data.data import Yearly, Quarterly
 
 
-def buildRatio(raw):
+def translate(raw):
     year = loader.getDate(raw["date"])
     return {
         "Year": year,
         "Current Ratio": raw.get("currentRatio"),
+        "Quick Ratio": raw.get("quickRatio"),
+        "Gross Profit Margin": raw.get("grossProfitMargin"),
+        "Operating Profit Margin": raw.get("operatingProfitMargin"),
+        "Return on Assets": raw.get("returnOnAssets"),
+        "Return on Equity": raw.get("returnOnEquity"),
+        "Debt Ratio": raw.get("debtRatio"),
+        "Debt Equity Ratio": raw.get("debtEquityRatio"),
+        "Cash Flow to Debt Ratio": raw.get("cashFlowToDebtRatio"),
+        "Price to Book Ratio": raw.get("priceToBookRatio"),
     }
-
-
-class Yearly:
-
-    _ratios = {}
-
-    def __init__(self):
-        return
-
-    def load(self, data):
-        for raw in data:
-            ratio = buildRatio(raw)
-            self._ratios[ratio["Year"]] = ratio
-
-    def year(self, year):
-        if year in self._ratios:
-            return self._ratios[year]
-
-        return {}
-
-    def allYears(self):
-        return self._ratios
-
-    def getKey(self, key):
-        resp = {}
-        for year, r in self._ratios.items():
-            resp.update({year: r[key]})
-        return resp
-
-class Quarterly:
-
-    __sheets = {}
-
-    def __init__(self):
-        return
-
-    def load(self, sheets):
-        return
-
-    def data(self, sheet):
-        return
-
-    def quarter(self, year, qtr):
-        if year in self.__sheets:
-            if qtr in self.__sheets[year]:
-                return self.__sheets[year][qtr]
-
-        return {}
-
-    def allQtrs(self):
-        return self.__sheets
 
 
 class Ratios:
 
-    _yearly = Yearly()
-    _quarterly = Quarterly()
+    _yearly = Yearly(translate)
+    _quarterly = Quarterly(translate)
 
     def __init__(self):
         return

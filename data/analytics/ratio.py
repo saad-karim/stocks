@@ -4,7 +4,7 @@ class Ratio:
         return
     
     def calc(self, upper, lower):
-        ratios = [0, 0, 0, 0]
+        ratios = [None, None, None, None]
 
         if len(upper) != len(lower):
             raise Exception("number of elements in upper and lower must match")

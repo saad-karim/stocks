@@ -55,7 +55,7 @@ class RawDataFetcher:
         return self.translator.advancedFundamentals.yearly(resp)
 
     def yearlyFinancialRatios(self, symb):
-        resp = self.api.financialRatios(symb)
+        resp = self.api.financialRatios(symb, Annual, self.years)
         return resp
 
     # Realtime

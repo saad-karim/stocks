@@ -10,8 +10,10 @@ requests = "*"
 numpy-financial = "*"
 pycodestyle = "*"
 pylint = "*"
+pandas = "*"
 
 [dev-packages]
+pytest = "*"
 
 [requires]
 python_version = "3.8"

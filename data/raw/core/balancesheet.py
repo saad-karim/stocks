@@ -14,6 +14,8 @@ def translate(raw):
         "Long-Term Debt": raw["longTermDebt"],
         "Common Stock": raw["commonStock"],
         "Retained Earnings": raw["retainedEarnings"],
+        "Total Assets": raw["totalAssets"],
+        "Total Liabilities": raw["totalLiabilities"],
     }
 
 
@@ -36,5 +38,5 @@ class BalanceSheet:
         print("q values: ", qtrlyValues)
         yearlyValues = self._yearly.getKey(key)
         print("y values: ", yearlyValues)
-        
+
         return qtrlyValues.update(yearlyValues)

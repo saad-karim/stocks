@@ -1,6 +1,6 @@
 import unittest
 
-from ratio import Ratio
+from analytics.ratio import Ratio
 
 class TestRatios(unittest.TestCase):
 
@@ -28,7 +28,7 @@ class TestRatios(unittest.TestCase):
         }
 
         ratios = Ratio().calc(upper, lower)
-        self.assertEqual(ratios, [10.0, 10.0, 10.0, 10.0, 10.0])
+        self.assertEqual(ratios, [None, None, None, None, 10.0, 10.0, 10.0, 10.0, 10.0])
 
 if __name__ == '__main__':
     unittest.main()

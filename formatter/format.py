@@ -53,7 +53,9 @@ def balanceSheet(balancesheet):
     return {
         'Cash': [generate(balancesheet, "Cash"), "money"],
         'Current Assets': [generate(balancesheet, "Current Assets"), "money"],
-        'Current Liabilities': [generate(balancesheet, "Current Liabilities"),"money"],
+        'Current Liabilities': [generate(balancesheet, "Current Liabilities"), "money"],
+        'Total Assets': [generate(balancesheet, "Total Assets"), "money"],
+        'Total Liabilities': [generate(balancesheet, "Total Liabilities"), "money"],
         'Shareholder Equity': [generate(balancesheet, "Shareholder Equity"), "money"],
         'Common Stock': [generate(balancesheet, "Common Stock"), "num"],
     }
@@ -92,4 +94,25 @@ def financialRatios(ratios):
         "Debt Equity Ratio": [generate(ratios, "Debt Equity Ratio"), "num"],
         "Cash Flow to Debt Ratio": [generate(ratios, "Cash Flow to Debt Ratio"), "num"],
         "Price to Book Ratio": [generate(ratios, "Price to Book Ratio"), "num"],
+    }
+
+
+def trends(trends):
+    return {
+        'Net Income Trend': [trends["Net Income Trend"], "pct"],
+        'EPS Trend': [trends["EPS Trend"], "pct"],
+        'FCF Trend': [trends["FCF Trend"], "pct"],
+        'ROE Trend': [trends["ROE Trend"], "pct"],
+        'BVPS Trend': [trends["BVPS Trend"], "pct"],
+    }
+
+
+def overallTrends(trends):
+    return {
+        'Net Income Trend Overall': [trends["Net Income"], "pct"],
+        'EPS Trend Overall': [trends["EPS Trend"], "pct"],
+        'FCF Trend Overall': [trends["FCF Trend"], "pct"],
+        'FCF Trend Overall': [trends["FCF Trend"], "pct"],
+        'ROE Trend Overall': [trends["ROE Trend"], "pct"],
+        'BVPS Trend Overall': [trends["BVPS Trend"], "pct"],
     }

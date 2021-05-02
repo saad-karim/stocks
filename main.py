@@ -77,6 +77,9 @@ if envir == "sandbox":
 dataFetcher = RawDataFetcher(stockapi, 5, Translator())
 stock = Stock(symb, 10, dataFetcher)
 stock.loadData()
+stock.runSeriesAnalytics()
+stock.runOverallAnalytics()
+stock.logisticIndVariables()
 
 # Write gathered data to a properly formatted xls type file
 writer = Writer(stock)

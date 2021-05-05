@@ -61,6 +61,7 @@ def balanceSheet(balancesheet):
         'Retained Earnings': [generate(balancesheet, "Retained Earnings"), "money"],
         'Inventory': [generate(balancesheet, "Inventory"), "money"],
         'Common Stock': [generate(balancesheet, "Common Stock"), "num"],
+        'Treasury Stock': [generate(balancesheet, "Treasury Stock"), "num"],
     }
 
 
@@ -71,8 +72,6 @@ def cashFlow(cashFlow):
         'Operating Cash Flow': [generate(cashFlow, "Operating Cash Flow"), "money"],
         'Investing Cash Flow': [generate(cashFlow, "Investing Cash Flow"), "money"],
         'Financing Cash Flow': [generate(cashFlow, "Financing Cash Flow"), "money"],
-        # 'Free Cash Flow': [generate(cashFlow, "Free Cash Flow"), "money"],
-        # 'Stock BuyBack': [generate(cashFlow, "Stock Buyback"), "money"],
     }
 
 

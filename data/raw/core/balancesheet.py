@@ -17,6 +17,7 @@ def translate(raw):
         "Total Assets": raw["totalAssets"],
         "Total Liabilities": raw["totalLiabilities"],
         "Inventory": raw["inventory"],
+        "Treasury Stock": raw["treasuryStock"],
     }
 
 

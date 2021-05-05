@@ -114,8 +114,6 @@ class Stock:
         roeTrend = trend.calcFromDict(self._financialRatios.yearly().getKey("Return on Equity"))
         bvpsTrend = trend.calc(self._metrics.bvps())
 
-        print("bvps trend: ", bvpsTrend)
-
         self.seriesAnalytics = {
             "Net Income Trend": incomeTrend,
             "EPS Trend": epsTrend,
@@ -165,7 +163,6 @@ class Stock:
         payoutRatio = self._financialRatios.yearly().getKey("Payout Ratio")[2020]
 
         fcfToRevenue = self.metrics().fcf()[0]/self._income.yearly().getKey("Total Revenue")[2020]
-        print('fcf to revenue: ', fcfToRevenue)
 
         self.logistic = {
             "Debt to Equity Ratio <= 0.5": 1 if deRatio <= 0.5 else 0,

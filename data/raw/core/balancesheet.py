@@ -16,6 +16,7 @@ def translate(raw):
         "Retained Earnings": raw["retainedEarnings"],
         "Total Assets": raw["totalAssets"],
         "Total Liabilities": raw["totalLiabilities"],
+        "Inventory": raw["inventory"],
     }
 
 

@@ -130,8 +130,7 @@ class Stock:
         fcfTrend = trend.overall(self._metrics.fcf())
         roeTrend = trend.overallFromDict(self._financialRatios.yearly().getKey("Return on Equity"))
         bvpsTrend = trend.overall(self._metrics.bvps())
-
-        print("bvps trend: ", bvpsTrend)
+        operIncTrend = trend.overallFromDict(self._income.yearly().getKey("Operating Income"))
 
         self.overallAnalytics = {
             "Net Income": incomeTrend,
@@ -139,12 +138,14 @@ class Stock:
             "FCF Trend": fcfTrend,
             "ROE Trend": roeTrend,
             "BVPS Trend": bvpsTrend,
+            "Operating Income Trend": operIncTrend,
         }
 
     def logisticIndVariables(self):
         deRatio = self._financialRatios.yearly().getKey("Debt Equity Ratio")[2020]
         currRatio = self._financialRatios.yearly().getKey("Current Ratio")[2020]
         roeTrend = trend.overallFromDict(self._financialRatios.yearly().getKey("Return on Equity"))
+        roaTrend = trend.overallFromDict(self._financialRatios.yearly().getKey("Return on Assets"))
 
         dcf = self.dcf()[0].get("dcf")
         iv1 = self.metrics().intrinsicValue()
@@ -152,16 +153,37 @@ class Stock:
 
         averageIV = statistics.mean([dcf, iv1, iv2])
 
-        margin = self._price.price * .7
-        print("margin: ", margin)
+        price = self._price.price
+
+        interestCoverage = self._financialRatios.yearly().getKey("Interest Coverage")[2020]
+
+        currAssets = self._balanceSheet.yearly().getKey("Current Assets")[2020]
+        currLiab = self._balanceSheet.yearly().getKey("Current Liabilities")[2020]
+        inventory = self._balanceSheet.yearly().getKey("Inventory")[2020]
+
+        acid = (currAssets - inventory) / currLiab
+        payoutRatio = self._financialRatios.yearly().getKey("Payout Ratio")[2020]
+
+        fcfToRevenue = self.metrics().fcf()[0]/self._income.yearly().getKey("Total Revenue")[2020]
+        print('fcf to revenue: ', fcfToRevenue)
 
         self.logistic = {
             "Debt to Equity Ratio <= 0.5": 1 if deRatio <= 0.5 else 0,
+            "Debt to Equity Ratio <= 1.0": 1 if deRatio <= 1.0 else 0,
+            "Debt to Equity Ratio <= 1.5": 1 if deRatio <= 1.5 else 0,
+            "Debt to Equity Ratio <= 2.0": 1 if deRatio <= 2.0 else 0,
             "Current Ratio >= 1.5": 1 if currRatio >= 1.5 else 0,
-            "ROE > 8": 1 if roeTrend >= 0.08 else 0,
-            "EPS Growth > 2": 1 if self.overallAnalytics["EPS Trend"] >= 0 else 0,
-            "BVPS Growth > 2": 1 if self.overallAnalytics["BVPS Trend"] >= 0 else 0,
+            "ROE Trend > 8%": 1 if roeTrend >= 0.08 else 0,
+            "ROA Trend > 6%": 1 if roaTrend >= 0.06 else 0,
+            "EPS Growth > 2%": 1 if self.overallAnalytics["EPS Trend"] >= .02 else 0,
+            "BVPS Growth > 2%": 1 if self.overallAnalytics["BVPS Trend"] >= .02 else 0,
             "PE < 15": 1 if self._quote.get()["pe"] < 15 else 0,
-            "Meets Margin": 1 if averageIV <= margin else 0,
-            # "ROE Trend": 1 if roeTrend > 0 else 0,
+            "Meets Margin (30%)": 1 if averageIV <= (price*.7) else 0,
+            "Meets Margin (20%)": 1 if averageIV <= (price*.8) else 0,
+            "Meets Margin (10%)": 1 if averageIV <= (price*.9) else 0,
+            "Operating Income Growth > 2%": 1 if self.overallAnalytics["Operating Income Trend"] >= .02 else 0,
+            "Interest Coverage 5x": 1 if interestCoverage >= 5 else 0,
+            "Acid >= 1": 1 if acid >= 1 else 0,
+            "Payout Ratio <= 0.6": 1 if payoutRatio <= 0.6 else 0,
+            "FCF To Revenue >= 0.05": 1 if fcfToRevenue >= 0.05 else 0,
         }

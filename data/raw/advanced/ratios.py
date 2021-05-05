@@ -10,12 +10,18 @@ def translate(raw):
         "Quick Ratio": raw.get("quickRatio"),
         "Gross Profit Margin": raw.get("grossProfitMargin"),
         "Operating Profit Margin": raw.get("operatingProfitMargin"),
+        "Net Income Margin": raw.get("netProfitMargin"),
         "Return on Assets": raw.get("returnOnAssets"),
         "Return on Equity": raw.get("returnOnEquity"),
-        "Debt Ratio": raw.get("debtRatio"),
-        "Debt Equity Ratio": raw.get("debtEquityRatio"),
+        "Debt Ratio": raw.get("debtRatio"), # Total Liabilities / Total Assets
+        "Debt Equity Ratio": raw.get("debtEquityRatio"), # Total Debt / Total Equity
         "Cash Flow to Debt Ratio": raw.get("cashFlowToDebtRatio"),
         "Price to Book Ratio": raw.get("priceToBookRatio"),
+        "Interest Coverage": raw.get("interestCoverage"),
+        "Inventory Turnover": raw.get("inventoryTurnover"),
+        "Receivables Turnover": raw.get("receivablesTurnover"),
+        "Payables Turnover": raw.get("payablesTurnover"),
+        "Payout Ratio": raw.get("payoutRatio"),
     }
 
 

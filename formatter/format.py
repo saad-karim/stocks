@@ -54,9 +54,12 @@ def balanceSheet(balancesheet):
         'Cash': [generate(balancesheet, "Cash"), "money"],
         'Current Assets': [generate(balancesheet, "Current Assets"), "money"],
         'Current Liabilities': [generate(balancesheet, "Current Liabilities"), "money"],
+        'Long-Term Debt': [generate(balancesheet, "Long-Term Debt"), "money"],
         'Total Assets': [generate(balancesheet, "Total Assets"), "money"],
         'Total Liabilities': [generate(balancesheet, "Total Liabilities"), "money"],
         'Shareholder Equity': [generate(balancesheet, "Shareholder Equity"), "money"],
+        'Retained Earnings': [generate(balancesheet, "Retained Earnings"), "money"],
+        'Inventory': [generate(balancesheet, "Inventory"), "money"],
         'Common Stock': [generate(balancesheet, "Common Stock"), "num"],
     }
 
@@ -94,6 +97,11 @@ def financialRatios(ratios):
         "Debt Equity Ratio": [generate(ratios, "Debt Equity Ratio"), "num"],
         "Cash Flow to Debt Ratio": [generate(ratios, "Cash Flow to Debt Ratio"), "num"],
         "Price to Book Ratio": [generate(ratios, "Price to Book Ratio"), "num"],
+        "Interest Coverage": [generate(ratios, "Interest Coverage"), "num"],
+        "Inventory Turnover": [generate(ratios, "Inventory Turnover"), "num"],
+        "Receivable Turnover": [generate(ratios, "Receivable Turnover"), "num"],
+        "Payables Turnover": [generate(ratios, "Payables Turnover"), "num"],
+        "Dividend Payout Ratio": [generate(ratios, "Payout Ratio"), "num"],
     }
 
 
@@ -115,4 +123,5 @@ def overallTrends(trends):
         'FCF Trend Overall': [trends["FCF Trend"], "pct"],
         'ROE Trend Overall': [trends["ROE Trend"], "pct"],
         'BVPS Trend Overall': [trends["BVPS Trend"], "pct"],
+        'Operating Income Overall': [trends["Operating Income Trend"], "pct"],
     }

@@ -26,9 +26,10 @@ class Sandbox:
         log.info("Getting dividend information for: %s", symbol)
         cacheName = "dividends-{}".format(range)
 
-        cachedResponse = self.readCache(symbol, cacheName)
-        if cachedResponse is not None:
-            return cachedResponse
+        if not bool(self.refresh):
+            cachedResponse = self.readCache(symbol, cacheName)
+            if cachedResponse is not None:
+                return cachedResponse
 
         resource = "/dividends/{range}?token={token}". \
             format(range=range, token=self.token)
@@ -49,9 +50,10 @@ class Sandbox:
         log.info("Getting %s cash flow information for: %s", period, symbol)
         cacheName = "cashflow-{}".format(period)
 
-        cachedResponse = self.readCache(symbol, cacheName)
-        if cachedResponse is not None:
-            return cachedResponse
+        if not bool(self.refresh):
+            cachedResponse = self.readCache(symbol, cacheName)
+            if cachedResponse is not None:
+                return cachedResponse
 
         resource = "/cash-flow?period={period}&last={last}&token={token}". \
             format(period=period, last=last, token=self.token)
@@ -72,9 +74,10 @@ class Sandbox:
         log.info("Getting %s income information for: %s", period, symbol)
         cacheName = "income-{}".format(period)
 
-        cachedResponse = self.readCache(symbol, cacheName)
-        if cachedResponse is not None:
-            return cachedResponse
+        if not bool(self.refresh):
+            cachedResponse = self.readCache(symbol, cacheName)
+            if cachedResponse is not None:
+                return cachedResponse
 
         resource = "/income?period={period}&last={last}&token={token}". \
             format(period=period, last=last, token=self.token)
@@ -95,9 +98,10 @@ class Sandbox:
         log.info("Getting %s balance sheet information for: %s", period, symbol)
         cacheName = "balancesheet-{}".format(period)
 
-        cachedResponse = self.readCache(symbol, cacheName)
-        if cachedResponse is not None:
-            return cachedResponse
+        if not bool(self.refresh):
+            cachedResponse = self.readCache(symbol, cacheName)
+            if cachedResponse is not None:
+                return cachedResponse
 
         resource = "/balance-sheet?period={period}&last={last}&token={token}". \
             format(period=period, last=last, token=self.token)
@@ -117,9 +121,10 @@ class Sandbox:
     def keyStats(self, symbol):
         log.info("Getting key stats information for: %s", symbol)
 
-        cachedResponse = self.readCache(symbol, "keystats")
-        if cachedResponse is not None:
-            return cachedResponse
+        if not bool(self.refresh):
+            cachedResponse = self.readCache(symbol, "keystats")
+            if cachedResponse is not None:
+                return cachedResponse
 
         url = baseURL+symbol+"/stats?token=" + self.token
         log.info("Key Stats URL: %s", url)
@@ -136,9 +141,10 @@ class Sandbox:
     def advancedKeyStats(self, symbol):
         log.info("Getting advanced stats information for: %s", symbol)
 
-        cachedResponse = self.readCache(symbol, "advancedkeystats")
-        if cachedResponse is not None:
-            return cachedResponse
+        if not bool(self.refresh):
+            cachedResponse = self.readCache(symbol, "advancedkeystats")
+            if cachedResponse is not None:
+                return cachedResponse
 
         url = baseURL+symbol+"/advanced-stats?token=" + self.token
         log.info("Advance Stats URL: %s", url)
@@ -155,9 +161,10 @@ class Sandbox:
     def price(self, symbol):
         log.info("Getting price information for: %s", symbol)
 
-        cachedResponse = self.readCache(symbol, "price")
-        if cachedResponse is not None:
-            return cachedResponse
+        if not bool(self.refresh):
+            cachedResponse = self.readCache(symbol, "price")
+            if cachedResponse is not None:
+                return cachedResponse
 
         url = baseURL+symbol+"/price?token=" + self.token
         log.info("Price URL: %s", url)
@@ -175,9 +182,10 @@ class Sandbox:
         log.info("Getting advance fundamentals  for: %s", symbol)
         cacheName = "advancefundamentals-{}".format(period)
 
-        cachedResponse = self.readCache(symbol, cacheName)
-        if cachedResponse is not None:
-            return cachedResponse
+        if not bool(self.refresh):
+            cachedResponse = self.readCache(symbol, cacheName)
+            if cachedResponse is not None:
+                return cachedResponse
 
         base = "https://sandbox.iexapis.com/stable"
         resource = "/time-series/fundamentals/{symbol}/{period}?last={last}&token={token}". \

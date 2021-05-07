@@ -8,7 +8,7 @@ from data.raw.realtime.quote import Quote
 from data.raw.advanced.fundamentals import Fundamentals
 from data.raw.advanced.ratios import Ratios
 from analytics.metrics import Metrics
-from analytics.ratio import Ratio
+import analytics.analytics as analysis
 import statistics
 
 
@@ -34,7 +34,6 @@ class Stock:
         self._financialRatios = Ratios()
 
         # Analysis
-        self._ratios = Ratio()
         self._metrics = Metrics(self._price, self._quote, self._income,
                                     self._balanceSheet, self._cashFlow)
 

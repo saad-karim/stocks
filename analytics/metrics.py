@@ -12,19 +12,16 @@ class Metrics:
         self._bs = bs
         self._cf = cf
 
-    def epsGrowth(self):
-        return self._trend.epsGrowth(self.eps())
-
     def netWorkingCapital(self):
-        nc = [None, None, None, None]
-
         assets = self._bs.yearly().getKey("Current Assets")
+
         liabilities = self._bs.yearly().getKey("Current Liabilities")
 
         if len(assets) != len(liabilities):
             raise Exception("number of elements in assets and liabilities \
                 must match")
 
+        nc = []
         for i in assets.keys():
             nc.append(assets[i] - liabilities[i])
 
@@ -36,12 +33,13 @@ class Metrics:
         bs = self._bs
         cf = self._cf
 
-        roic = [None, None, None, None]
+        roic = []
         ebits = inc.yearly().getKey("EBIT")
         for i in ebits.keys():
             ebit = ebits[i]
             nopat = ebit * (1.2)  # Multiplied by marginal tax rate
 
+            # curLiab = bs.yearly().getKey("Current Liabilities")
             curLiab = bs.yearly().getKey("Current Liabilities")[i]
             longDebt = bs.yearly().getKey("Long-Term Debt")[i]
             commonStock = bs.yearly().getKey("Common Stock")[i]
@@ -52,7 +50,7 @@ class Metrics:
             ic = curLiab + longDebt + commonStock + retainedEarnings + \
                 cashFromFin + cashFromInv
 
-            roic.append(nopat/ic)
+            roic.append(round(nopat/ic, 2))
 
         return roic
 
@@ -68,7 +66,7 @@ class Metrics:
         for i in capExpenses.keys():
             # Capital expenditures stored as negative values hence
             # the addition of the two
-            fcfs.append(operationCF[i] + capExpenses[i])
+            fcfs.append(round(operationCF[i] + capExpenses[i], 2))
 
         return fcfs
 
@@ -79,7 +77,7 @@ class Metrics:
 
         allEPS = []
         for i in ni.keys():
-            allEPS.append(ni[i]/cs[i])
+            allEPS.append(round(ni[i]/cs[i], 2))
 
         return allEPS
 
@@ -90,7 +88,7 @@ class Metrics:
 
         allBVPS = []
         for i in se.keys():
-            allBVPS.append(se[i]/cs[i])
+            allBVPS.append(round(se[i]/cs[i], 2))
 
         return allBVPS
 
@@ -98,12 +96,12 @@ class Metrics:
     def pbvRatio(self):
         bvps = self.bvps()
 
-        pbv = [None, None, None, None]
+        pbv = []
         for bvp in bvps:
             if bvp is None:
                 continue
 
-            pbv.append(self._price.price/bvp)
+            pbv.append(round(self._price.price/bvp, 2))
 
         return pbv
 
@@ -111,12 +109,12 @@ class Metrics:
     def peRatio(self):
         allEPS = self.eps()
 
-        pes = [None, None, None, None]
+        pes = []
         for eps in allEPS:
             if eps is None:
                 continue
 
-            pes.append(self._price.price/eps)
+            pes.append(round(self._price.price/eps, 2))
 
         return pes
 
@@ -146,7 +144,7 @@ class Metrics:
         instrincValue = terminalValue + npv
 
         cs = self._quote.get()["sharesOutstanding"]
-        ivPerStock = instrincValue / cs
+        ivPerStock = round(instrincValue / cs, 2)
 
         return ivPerStock
 
@@ -170,6 +168,6 @@ class Metrics:
 
         dpfc = (((currentfcf*(1+fcfGrowthRate)**11)*(1+.03))/(discountRate-.03)) * (1/(1+discountRate)**11)
         iv = sum(dfcfs) + dpfc
-        ivPerStock = iv / shares
+        ivPerStock = round(iv / shares, 2)
 
         return ivPerStock

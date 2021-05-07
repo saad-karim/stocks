@@ -5,3 +5,5 @@ test.csv
 cache/
 output/
 .vscode
+.coverage
+cov.xml

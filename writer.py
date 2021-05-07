@@ -148,13 +148,13 @@ class Writer:
         row = self.coreDataHeader('Advanced Data', worksheet, row)
 
         # Metrics
-        row = self.writeData(worksheet, row, {"Net Working Capital": [stock.metrics().netWorkingCapital(), "num"]})
+        row = self.writeData(worksheet, row, {"Net Working Capital": [pad(stock.metrics().netWorkingCapital()), "num"]})
         row = self.writeData(worksheet, row, {"Free Cash Flow": [pad(stock.metrics().fcf()), "num"]})
         row = self.writeData(worksheet, row, {"Book Value per Share": [pad(stock.metrics().bvps()), "ratio"]})
-        row = self.writeData(worksheet, row, {"PBV Ratio": [stock.metrics().pbvRatio(), "ratio"]})
+        row = self.writeData(worksheet, row, {"PBV Ratio": [pad(stock.metrics().pbvRatio()), "ratio"]})
         row = self.writeData(worksheet, row, {"EPS": [pad(stock.metrics().eps()), "ratio"]})
-        row = self.writeData(worksheet, row, {"PE Ratio": [stock.metrics().peRatio(), "ratio"]})
-        row = self.writeData(worksheet, row, {"ROIC": [stock.metrics().roic(), "pct"]})
+        row = self.writeData(worksheet, row, {"PE Ratio": [pad(stock.metrics().peRatio()), "ratio"]})
+        row = self.writeData(worksheet, row, {"ROIC": [pad(stock.metrics().roic()), "pct"]})
 
         # Ratios
         # currentRatio = stock.ratios().calc(stock.balanceSheet().yearly().getKey("Current Assets"),
